@@ -1,0 +1,673 @@
+<!DOCTYPE struts PUBLIC
+"-//Apache Software Foundation//DTD Struts Configuration 2.0//EN" 
+"http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+
+	<constant value="css_xhtml" name="struts.ui.theme" />
+	<constant name="struts.multipart.maxSize" value="20971520" />
+	<constant name="struts.custom.i18n.resources" value="ApplicationResources" />
+	<constant name="struts.enable.SlashesInActionNames" value="true"/>
+	<constant name="struts.mapper.alwaysSelectFullNamespace" value="false"/>
+
+	<package name="default" extends="struts-default,json-default" >
+		<result-types>
+			<result-type name="tiles"
+				class="org.apache.struts2.views.tiles.TilesResult"></result-type>
+			<result-type name="imageResult"
+				class="com.weddfix.web.util.CustomImageBytesResult" />
+		</result-types>
+
+		<interceptors>
+		<interceptor name="authenticationInterceptor" class="com.weddfix.web.util.AuthenticationInterceptor"></interceptor>
+		<interceptor-stack name="authentication">
+				<interceptor-ref name="timer">
+					<param name="logLevel">INFO</param>
+				</interceptor-ref>
+				<interceptor-ref name="authenticationInterceptor">
+						<param name="excludeActions">register</param>	
+				</interceptor-ref>
+				<interceptor-ref name="completeStack" />
+				<interceptor-ref name="i18n" />
+				<interceptor-ref name="basicStack" />
+		</interceptor-stack>
+		</interceptors>
+
+		<global-results>
+			<result name="exception">/jsp-pages/common/exception.jsp</result>
+		</global-results>
+
+		<global-exception-mappings>
+			<exception-mapping result="exception" exception="java.lang.Exception"></exception-mapping>
+			<exception-mapping result="databaseException"
+				exception="org.hibernate.exception.GenericJDBCException"></exception-mapping>
+		</global-exception-mappings>
+		
+		<!-- Image Action Starts -->
+		
+		<action name="ImageAction" class="com.weddfix.web.controller.ImageAction">
+			<result name="success" type="imageResult">
+			</result>
+		</action>
+		
+		<!-- Image Action End -->
+		
+		<!-- Public Action Starts -->
+		
+		<action name="loadCategoryAndCityMasters" class="com.weddfix.web.controller.CategoryInfoAction" method="loadCategoryAndCityMasters">
+			<result type="json" name="success"></result>
+			<result type="json" name="error"></result>
+		</action>
+		
+		<action name="home" class="com.weddfix.web.controller.CategoryInfoAction" method="loadHomeImages">
+			<result type="tiles" name="success">homePage</result>
+		</action>
+		
+		<action name="searchCategoryByCity" class="com.weddfix.web.controller.CategoryInfoAction" method="searchCategoryByCitySession">
+			<result type="json" name="success"></result>
+			<result type="json" name="error"></result>
+		</action>
+		
+		<action name="vendor_list" class="com.weddfix.web.controller.CategoryInfoAction" method="searchCategoryByCity">
+			<result type="tiles" name="success">vendorListPage</result>
+			<result type="tiles" name="error">errorPage</result>
+		</action>
+		
+		<action name="vendorDetailsSession" class="com.weddfix.web.controller.CategoryInfoAction" method="vendorDetailsSession">
+			<result type="json" name="success"></result>
+			<result type="json" name="error"></result>
+		</action>
+		
+		<action name="vendor_details" class="com.weddfix.web.controller.CategoryInfoAction" method="loadVendorDetails">
+			<result type="tiles" name="success">vendorDetailsPage</result>
+			<result type="tiles" name="error">errorPage</result>
+		</action>
+		
+		<action name="login" class="com.weddfix.web.controller.LoginAction" method="logout">
+			<result type="tiles" name="success">loginPage</result>
+		</action>
+		
+		<action name="loginSuccess" class="com.weddfix.web.controller.LoginAction" method="login">
+			<result type="json" name="success"></result>
+			<result type="json" name="error"></result>
+		</action>
+		
+		<action name="user_home" class="com.weddfix.web.controller.LoginAction" method="login">
+			<result type="tiles" name="success">adminHomePage</result>
+			<result type="tiles" name="error">loginPage</result>
+		</action>
+		
+		<action name="logout" class="com.weddfix.web.controller.LoginAction" method="logout">
+			<result type="tiles" name="success">loginPage</result>
+			<result type="tiles" name="error">errorPage</result>
+		</action>
+		
+		<action name="register" class="com.weddfix.web.controller.RegisterAction" method="loadRegisterMasters">
+			<result type="tiles" name="success">registerPage</result>
+			<result type="tiles" name="error">errorPage</result>
+		</action>
+		
+		<action name="registered_successfully" class="com.weddfix.web.controller.RegisterAction" method="saveRegisterDetails">
+			<result type="tiles" name="success">registeredSuccessfullyPage</result>
+			<result type="tiles" name="error">errorPage</result>
+		</action>
+		
+		<action name="checkUserAlreadyExist" class="com.weddfix.web.controller.RegisterAction" method="checkUserAlreadyExist">
+			<result type="json" name="success"></result>
+			<result type="json" name="error"></result>
+		</action>
+		
+		<action name="checkSubscriberEmailAlreadyExist" class="com.weddfix.web.controller.SubscribersAction" method="checkSubscriberEmailAlreadyExist">
+			<result type="json" name="success"></result>
+			<result type="json" name="error"></result>
+		</action>
+
+		<action name="update_profile_success" class="com.weddfix.web.controller.RegisterAction" method="saveRegisterDetails">
+			<param name="filesPath">Images\</param>
+			<interceptor-ref name="fileUpload">
+				<!-- <param name="maximumSize">2097152
+				</param> -->
+				<param name="allowedTypes">image/png,image/gif,image/jpeg,image/pjpeg,image/jpg</param>
+			</interceptor-ref>
+			<interceptor-ref name="defaultStack"></interceptor-ref>
+			<result type="json" name="success"></result>
+			<result type="json" name="error"></result>
+		</action>
+		
+		<action name="reviewSuccess" class="com.weddfix.web.controller.ReviewAction" method="saveReviewDetails">
+			<result type="json" name="success"></result>
+			<result type="json" name="error"></result>
+		</action>
+		
+		<action name="registeredSuccess" class="com.weddfix.web.controller.RegisterAction" method="saveRegisterJsonDetails">
+			<result type="json" name="success"></result>
+			<result type="json" name="error"></result>
+		</action>
+		
+		<action name="sendNowSuccess" class="com.weddfix.web.controller.SendInfoAction" method="saveSendInfoDetails">
+			<result type="json" name="success"></result>
+			<result type="json" name="error"></result>
+		</action>
+		
+		<action name="my_home" class="com.weddfix.web.controller.UserProfileAction" method="loadMyDashBoardDetails">
+			<result type="tiles" name="success">myHomePage</result>
+			<result type="tiles" name="error">myHomePage</result>
+		</action>
+		
+		<action name="shortlistSuccess" class="com.weddfix.web.controller.CategoryInfoAction" method="saveShortlistDetails">
+			<result type="json" name="success"></result>
+			<result type="json" name="error"></result>
+		</action>
+		
+		<action name="unShortlistSuccess" class="com.weddfix.web.controller.CategoryInfoAction" method="deleteShortlistDetails">
+			<result type="json" name="success"></result>
+			<result type="json" name="error"></result>
+		</action>
+		
+		<action name="my_wishlist" class="com.weddfix.web.controller.CategoryInfoAction" method="loadMyWishlistDetails">
+			<result type="tiles" name="success">myWishlistPage</result>
+			<result type="tiles" name="error">errorPage</result>
+		</action>
+		
+		<action name="my_bookings" class="com.weddfix.web.controller.CategoryInfoAction" method="loadMyBookingDetails">
+			<result type="tiles" name="success">myBookingsPage</result>
+			<result type="tiles" name="error">errorPage</result>
+		</action>
+		
+		<action name="vendor_booking_details" class="com.weddfix.web.controller.CategoryInfoAction" method="loadVendorDetails">
+			<result type="tiles" name="success">vendorBookingDetailsPage</result>
+			<result type="tiles" name="error">errorPage</result>
+		</action>
+		
+		<action name="my_profile" class="com.weddfix.web.controller.UserProfileAction" method="loadMyPersonalDetails">
+			<result type="tiles" name="success">myProfilePage</result>
+			<result type="tiles" name="error">errorPage</result>
+		</action>
+		
+		<action name="delete_profile_success"  class="com.weddfix.web.controller.UserProfileAction" method="deleteProfile">
+			<result type="json" name="success"></result>
+			<result type="json" name="error"></result>
+		</action>
+		
+		<action name="faq">
+			<result type="tiles" name="success">faqPage</result>
+		</action>
+		
+		<action name="loadStateByCountryId" class="com.weddfix.web.controller.UserProfileAction" method="loadStateByCountryId">
+			<result type="json" name="success"></result>
+			<result type="json" name="error"></result>
+		</action>
+		
+		<action name="loadCityByStateId" class="com.weddfix.web.controller.UserProfileAction" method="loadCityByStateId">
+			<result type="json" name="success"></result>
+			<result type="json" name="error"></result>
+		</action>
+		
+		<action name="contact">
+			<result type="tiles" name="success">contactPage</result>
+		</action>
+		
+		<action name="comment_success" class="com.weddfix.web.controller.CommentsAction" method="saveCommentDetails">
+			<result type="json" name="success"></result>
+		</action>
+		
+		<action name="subscriber_success" class="com.weddfix.web.controller.SubscribersAction" method="saveSubscriberDetails">
+			<result type="json" name="success"></result>
+		</action>
+		
+		<action name="reset_password_success" class="com.weddfix.web.controller.RegisterAction" method="resetPassword">
+			<result type="tiles" name="success">successPage</result>
+			<result type="tiles" name="error">errorPage</result>
+		</action>
+		
+		<action name="forgot_password">
+			<result type="tiles" name="success">forgotPasswordPage</result>
+		</action>
+		
+		<action name="forgot_password_success" class="com.weddfix.web.controller.RegisterAction" method="sendForgotPassword">
+			<result type="tiles" name="success">successPage</result>
+			<result type="tiles" name="error">errorPage</result>
+		</action>
+		
+		<action name="reset">
+			<result type="tiles" name="success">resetPage</result>
+		</action>
+		
+		<action name="reset2">
+			<result type="tiles" name="success">reset2Page</result>
+		</action>
+		
+		<action name="verify_mobile">
+			<result type="tiles" name="success">verifyMobilePage</result>
+		</action>
+		
+		<action name="reSendCode" class="com.weddfix.web.controller.RegisterAction" method="reSendCode">
+			<result type="json" name="success"></result>
+			<result type="json" name="error"></result>
+		</action>
+		
+		<action name="verifyCodeAndUpdateMobile" class="com.weddfix.web.controller.RegisterAction" method="verifyCodeAndUpdateMobile">
+			<result type="json" name="success"></result>
+			<result type="json" name="error"></result>
+		</action>
+		
+		<action name="submit_your_feedback">
+			<result type="tiles" name="success">feedBackPage</result>
+		</action>
+		
+		<action name="submit_feedback" class="com.weddfix.web.controller.UserProfileAction" method="loadFeedBackInfoDetails">
+			<result type="tiles" name="success">feedBack2Page</result>
+			<result type="tiles" name="error">errorPage</result>
+		</action>
+		
+		<!-- Public Action Ends -->
+		
+		<!-- Admin Action Starts -->
+		
+		<action name="admin_home">
+			<result type="tiles" name="success">adminHomePage</result>
+		</action>
+		
+		<action name="banner_photos" class="com.weddfix.web.controller.PhotoGalleryAction" method="loadBannerPhotoGallery">
+			<result type="tiles" name="success">bannerPhotoGalleryPage</result>
+			<result type="tiles" name="error">errorPage</result>
+		</action>
+		
+		<action name="uploadBannerPhotos" class="com.weddfix.web.controller.CategoryInfoAction" method="uploadBannerPhotos">
+			<param name="filesPath">Images\</param>
+			<interceptor-ref name="fileUpload">
+				<!-- <param name="maximumSize">2097152
+				</param> -->
+				<param name="allowedTypes">image/png,image/gif,image/jpeg,image/pjpeg,image/jpg</param>
+			</interceptor-ref>
+			<interceptor-ref name="defaultStack"></interceptor-ref>
+			<result type="json" name="success"></result>
+			<result type="json" name="error"></result>
+		</action>
+		
+		<action name="activateBannerPhotoSuccess" class="com.weddfix.web.controller.CategoryInfoAction" method="saveActiveBannerPhoto">
+			<result type="json" name="success"></result>
+			<result type="json" name="error"></result>
+		</action>
+		
+		<action name="deActivateBannerPhotoSuccess" class="com.weddfix.web.controller.CategoryInfoAction" method="saveActiveBannerPhoto">
+			<result type="json" name="success"></result>
+			<result type="json" name="error"></result>
+		</action>
+
+		<action name="user_role" class="com.weddfix.web.controller.RegisterAction" method="loadAllUserRoleDetails">
+			<result type="tiles" name="success">userRolePage</result>
+			<result type="tiles" name="error">errorPage</result>
+		</action>
+		
+		<action name="updateUserRoleAndStatus" class="com.weddfix.web.controller.RegisterAction" method="updateUserRoleAndStatus">
+			<result type="json" name="success"></result>
+			<result type="json" name="error"></result>
+		</action>
+		
+		<action name="vendor_status" class="com.weddfix.web.controller.VendorRegisterAction" method="loadAllVendorRoleDetails">
+			<result type="tiles" name="success">vendorRolePage</result>
+			<result type="tiles" name="error">errorPage</result>
+		</action>
+		
+		<action name="updateVendorRoleAndStatus" class="com.weddfix.web.controller.VendorRegisterAction" method="updateVendorRoleAndStatus">
+			<result type="json" name="success"></result>
+			<result type="json" name="error"></result>
+		</action>
+		
+		<action name="masters_home">
+			<result type="tiles" name="success">mastersHomePage</result>
+		</action>
+		
+		<action name="role_master">
+			<result type="tiles" name="success">roleMasterPage</result>
+		</action>
+		
+		<action name="load_role_master" class="com.weddfix.web.controller.RoleMasterAction" method="populateRoleMasterList">
+			<result type="json" name="success"></result>
+		</action>
+		
+		<action name="edit_role_master" class="com.weddfix.web.controller.RoleMasterAction" method="editRoleMasterList">
+			<result type="json" name="success"></result>
+			<result name="error">errorPage</result>
+		</action>
+		
+		<action name="organization_master">
+			<result type="tiles" name="success">organizationMasterPage</result>
+		</action>
+		
+		<action name="load_organization_master" class="com.weddfix.web.controller.OrganizationMasterAction" method="populateOrganizationMasterList">
+			<result type="json" name="success"></result>
+		</action>
+		
+		<action name="edit_organization_master" class="com.weddfix.web.controller.OrganizationMasterAction" method="editOrganizationMasterList">
+			<result type="json" name="success"></result>
+			<result name="error">errorPage</result>
+		</action>
+		
+		<action name="status_master">
+			<result type="tiles" name="success">statusMasterPage</result>
+		</action>
+		
+		<action name="load_status_master" class="com.weddfix.web.controller.StatusMasterAction" method="populateStatusMasterList">
+			<result type="json" name="success"></result>
+		</action>
+		
+		<action name="edit_status_master" class="com.weddfix.web.controller.StatusMasterAction" method="editStatusMasterList">
+			<result type="json" name="success"></result>
+			<result name="error">errorPage</result>
+		</action>
+		
+		<action name="currency_master">
+			<result type="tiles" name="success">currencyMasterPage</result>
+		</action>
+		
+		<action name="load_currency_master" class="com.weddfix.web.controller.CurrencyMasterAction" method="populateCurrencyMasterList">
+			<result type="json" name="success"></result>
+		</action>
+		
+		<action name="edit_currency_master" class="com.weddfix.web.controller.CurrencyMasterAction" method="editCurrencyMasterList">
+			<result type="json" name="success"></result>
+			<result name="error">errorPage</result>
+		</action>
+		
+		<action name="country_master">
+			<result type="tiles" name="success">countryMasterPage</result>
+		</action>
+		
+		<action name="load_country_master" class="com.weddfix.web.controller.CountryMasterAction" method="populateCountryMasterList">
+			<result type="json" name="success"></result>
+		</action>
+		
+		<action name="loadCountryMaster" class="com.weddfix.web.controller.UserProfileAction" method="loadCountryMaster">
+			<result type="json" name="success"></result>
+		</action>
+		
+		<action name="edit_country_master" class="com.weddfix.web.controller.CountryMasterAction" method="editCountryMasterList">
+			<result type="json" name="success"></result>
+			<result name="error">errorPage</result>
+		</action> 
+		
+		<action name="state_master">
+			<result type="tiles" name="success">stateMasterPage</result>
+		</action>
+		
+		<action name="load_state_master" class="com.weddfix.web.controller.StateMasterAction" method="populateStateMasterList">
+			<result type="json" name="success"></result>
+		</action>
+		
+		<action name="loadStateMaster" class="com.weddfix.web.controller.UserProfileAction" method="loadStateMaster">
+			<result type="json" name="success"></result>
+		</action>
+		
+		<action name="edit_state_master" class="com.weddfix.web.controller.StateMasterAction" method="editStateMasterList">
+			<result type="json" name="success"></result>
+			<result name="error">errorPage</result>
+		</action>
+		
+		<action name="city_master">
+			<result type="tiles" name="success">cityMasterPage</result>
+		</action>
+		
+		<action name="load_city_master" class="com.weddfix.web.controller.CityMasterAction" method="populateCityMasterList">
+			<result type="json" name="success"></result>
+		</action>
+		
+		<action name="edit_city_master" class="com.weddfix.web.controller.CityMasterAction" method="editCityMasterList">
+			<result type="json" name="success"></result>
+			<result name="error">errorPage</result>
+		</action>
+		
+		<action name="upgrade_plan_master">
+			<result type="tiles" name="success">upgradePlanMasterPage</result>
+		</action>
+		
+		<action name="load_upgrade_plan_master" class="com.weddfix.web.controller.UpgradePlanMasterAction" method="populateUpgradePlanMasterList">
+			<result type="json" name="success"></result>
+		</action>
+		
+		<action name="edit_upgrade_plan_master" class="com.weddfix.web.controller.UpgradePlanMasterAction" method="editUpgradePlanMasterList">
+			<result type="json" name="success"></result>
+			<result name="error">errorPage</result>
+		</action>
+		
+		<!-- Admin Action Ends -->
+
+		<!-- Payment Actions Starts -->
+
+		<action name="upgrade" class="com.weddfix.web.controller.UserProfileAction" method="loadUpgradePlanDetails">
+			<result type="tiles" name="success">upgradePage</result>
+			<result type="tiles" name="error">errorPage</result>
+		</action>
+		
+		<action name="payment_details">
+			<result type="tiles" name="success">paymentDetailsPage</result>
+		</action>
+		
+		<action name="promotion_details" class="com.weddfix.web.controller.PromotionDetailsAction" method="loadPromotionDetails">
+			<result type="tiles" name="success">promotionDetailsPage</result>
+			<result type="tiles" name="error">errorPage</result>
+		</action>
+		
+		<action name="savePromotion" class="com.weddfix.web.controller.PromotionDetailsAction" method="savePromotionDetails">
+			<result type="json" name="success"></result>
+			<result type="json" name="error"></result>
+		</action>
+		
+		<action name="deletePromotion" class="com.weddfix.web.controller.PromotionDetailsAction" method="deletePromotion">
+			<result type="json" name="success"></result>
+			<result type="json" name="error"></result>
+		</action>
+		
+		<action name="sendPromotion" class="com.weddfix.web.controller.PromotionDetailsAction" method="sendPromotion">
+			<result type="json" name="success"></result>
+			<result type="json" name="error"></result>
+		</action>
+		
+		<action name="cart_session" class="com.weddfix.web.controller.CartDetailsAction" method="viewCartSession">
+			<result type="json" name="success"></result>
+			<result type="json" name="error"></result>
+		</action>
+		
+		<action name="cart" class="com.weddfix.web.controller.CartDetailsAction" method="saveOrUpdateAndLoadCartDetails">
+			<result type="tiles" name="success">cartPage</result>
+			<result type="tiles" name="error">cartPage</result>
+		</action>
+		
+		<action name="validatePromoCode" class="com.weddfix.web.controller.CartDetailsAction" method="validatePromoCode">
+			<result type="json" name="success"></result>
+			<result type="json" name="error"></result>
+		</action>
+		
+		<action name="payment_failure">
+			<result type="tiles" name="success">paymentFailurePage</result>
+		</action>
+		
+		<action name="payment_success">
+			<result type="tiles" name="success">paymentSuccessPage</result>
+		</action>
+		
+	    <!-- Payment Actions End -->
+
+		<!-- Vendor Action Starts -->
+		
+		<action name="vendor_dashboard" class="com.weddfix.web.controller.UserProfileAction" method="loadVendorDashBoardDetails">
+			<result type="tiles" name="success">vendorHomePage</result>
+			<result type="tiles" name="error">errorPage</result>
+		</action>
+		
+		<action name="vendor_bookings" class="com.weddfix.web.controller.CategoryInfoAction" method="loadVendorBookingDetails">
+			<result type="tiles" name="success">bookingsPage</result>
+			<result type="tiles" name="error">errorPage</result>
+		</action>
+		
+		<action name="requestFeedBackSuccess" class="com.weddfix.web.controller.SendInfoAction" method="requestFeedBack">
+			<result type="json" name="success"></result>
+			<result type="json" name="error"></result>
+		</action>
+		
+		<action name="vendor_add_listing" class="com.weddfix.web.controller.CategoryInfoAction" method="loadMasters">
+			<result type="tiles" name="success">vendorAddListingPage</result>
+			<result type="tiles" name="error">errorPage</result>
+		</action>
+		
+		<action name="checkCompanyNameAlredyExist" class="com.weddfix.web.controller.CategoryInfoAction" method="checkCompanyNameAlredyExist">
+			<result type="json" name="success"></result>
+			<result type="json" name="error"></result>
+		</action>
+		
+		<action name="checkOtherCompanyNameAlredyExist" class="com.weddfix.web.controller.CategoryInfoAction" method="checkOtherCompanyNameAlredyExist">
+			<result type="json" name="success"></result>
+			<result type="json" name="error"></result>
+		</action>
+		
+		<action name="vendor_add_listing_success" class="com.weddfix.web.controller.CategoryInfoAction" method="saveCatagoryInfoDetails">
+			<param name="filesPath">Images\</param>
+			<interceptor-ref name="fileUpload">
+				<!-- <param name="maximumSize">2097152
+				</param> -->
+				<param name="allowedTypes">image/png,image/gif,image/jpeg,image/pjpeg,image/jpg</param>
+			</interceptor-ref>
+			<interceptor-ref name="defaultStack"></interceptor-ref>
+			<result type="json" name="success"></result>
+			<result type="json" name="error"></result>
+		</action>
+		
+		<action name="vendor_my_listing" class="com.weddfix.web.controller.CategoryInfoAction" method="loadVenueDetails">
+			<result type="tiles" name="success">vendorMyListingPage</result>
+			<result type="tiles" name="error">errorPage</result>
+		</action>
+		
+		<action name="vendor_edit_listing_session" class="com.weddfix.web.controller.CategoryInfoAction" method="editVenueDetailsSession">
+			<result type="json" name="success"></result>
+			<result type="json" name="error"></result>
+		</action>
+		
+		<action name="deleteCategoryInfo"  class="com.weddfix.web.controller.CategoryInfoAction" method="deleteCategoryInfo">
+			<result type="json" name="success"></result>
+			<result type="json" name="error"></result>
+		</action>
+		
+		<action name="vendor_edit_listing" class="com.weddfix.web.controller.CategoryInfoAction" method="loadEditVenueDetails">
+			<result type="tiles" name="success">vendorEditListingPage</result>
+			<result type="tiles" name="error">errorPage</result>
+		</action>
+		
+		<action name="deletePhoto"  class="com.weddfix.web.controller.CategoryInfoAction" method="deletePhoto">
+			<result type="json" name="success"></result>
+			<result type="json" name="error"></result>
+		</action>
+		
+		<action name="uploadMorePhotos" class="com.weddfix.web.controller.CategoryInfoAction" method="uploadMorePhotos">
+			<param name="filesPath">Images\</param>
+			<interceptor-ref name="fileUpload">
+				<!-- <param name="maximumSize">2097152
+				</param> -->
+				<param name="allowedTypes">image/png,image/gif,image/jpeg,image/pjpeg,image/jpg</param>
+			</interceptor-ref>
+			<interceptor-ref name="defaultStack"></interceptor-ref>
+			<result type="json" name="success"></result>
+			<result type="json" name="error"></result>
+		</action>
+		
+		<action name="vendor_pricing">
+			<result type="tiles" name="success">vendorPricingPage</result>
+			<result type="tiles" name="error">errorPage</result>
+		</action>
+		
+		<action name="vendor_login" class="com.weddfix.web.controller.LoginAction" method="logout">
+			<result type="tiles" name="success">vendorLoginPage</result>
+		</action>
+		
+		<action name="vendor_home" class="com.weddfix.web.controller.LoginAction" method="vendorLogin">
+			<result type="tiles" name="success">adminHomePage</result>
+			<result type="tiles" name="error">vendorLoginPage</result>
+		</action>
+		
+		<action name="vendor_logout" class="com.weddfix.web.controller.LoginAction" method="logout">
+			<result type="tiles" name="success">vendorLoginPage</result>
+			<result type="tiles" name="error">errorPage</result>
+		</action>
+		
+		<action name="vendor_register" class="com.weddfix.web.controller.VendorRegisterAction" method="loadRegisterMasters">
+			<result type="tiles" name="success">vendorRegisterPage</result>
+			<result type="tiles" name="error">errorPage</result>
+		</action>
+		
+		<action name="vendor_registered_successfully" class="com.weddfix.web.controller.VendorRegisterAction" method="saveVendorRegisterDetails">
+			<result type="tiles" name="success">vendorRegisteredSuccessfullyPage</result>
+			<result type="tiles" name="error">errorPage</result>
+		</action>
+		
+		<action name="vendorRegisteredSuccess" class="com.weddfix.web.controller.VendorRegisterAction" method="saveVendorRegisterJsonDetails">
+			<result type="json" name="success"></result>
+			<result type="json" name="error"></result>
+		</action>
+		
+		<action name="vendor_profile" class="com.weddfix.web.controller.UserProfileAction" method="loadVendorPersonalDetails">
+			<result type="tiles" name="success">vendorProfilePage</result>
+			<result type="tiles" name="error">errorPage</result>
+		</action>
+		
+		<action name="account_details" class="com.weddfix.web.controller.VendorRegisterAction" method="loadMyAccountDetails">
+			<result type="tiles" name="success">accountDetailsPage</result>
+			<result type="tiles" name="error">errorPage</result>
+		</action>
+		
+		<action name="vendor_update_profile_success" class="com.weddfix.web.controller.VendorRegisterAction" method="saveVendorRegisterDetails">
+			<param name="filesPath">Images\</param>
+			<interceptor-ref name="fileUpload">
+				<!-- <param name="maximumSize">2097152
+				</param> -->
+				<param name="allowedTypes">image/png,image/gif,image/jpeg,image/pjpeg,image/jpg</param>
+			</interceptor-ref>
+			<interceptor-ref name="defaultStack"></interceptor-ref>
+			<result type="json" name="success"></result>
+			<result type="json" name="error"></result>
+		</action>
+		
+		<action name="reset_vendor_password_success" class="com.weddfix.web.controller.VendorRegisterAction" method="resetPassword">
+			<result type="tiles" name="success">successPage</result>
+			<result type="tiles" name="error">errorPage</result>
+		</action>
+		
+		<action name="checkVendorAlreadyExist" class="com.weddfix.web.controller.VendorRegisterAction" method="checkVendorAlreadyExist">
+			<result type="json" name="success"></result>
+			<result type="json" name="error"></result>
+		</action>
+		
+		<action name="verify_vendor_mobile">
+			<result type="tiles" name="success">verifyVendorMobilePage</result>
+		</action>
+		
+		<action name="vendorReSendCode" class="com.weddfix.web.controller.VendorRegisterAction" method="reSendCode">
+			<result type="json" name="success"></result>
+			<result type="json" name="error"></result>
+		</action>
+		
+		<action name="verifyCodeAndUpdateVendorMobile" class="com.weddfix.web.controller.VendorRegisterAction" method="verifyCodeAndUpdateMobile">
+			<result type="json" name="success"></result>
+			<result type="json" name="error"></result>
+		</action>
+		
+		<action name="vendor_forgot_password">
+			<result type="tiles" name="success">vendorForgotPasswordPage</result>
+		</action>
+		
+		<action name="vendor_forgot_password_success" class="com.weddfix.web.controller.VendorRegisterAction" method="sendForgotPassword">
+			<result type="tiles" name="success">successPage</result>
+			<result type="tiles" name="error">errorPage</result>
+		</action>
+		
+		<action name="v_reset">
+			<result type="tiles" name="success">vResetPage</result>
+		</action>
+		
+		<action name="v_reset2">
+			<result type="tiles" name="success">vReset2Page</result>
+		</action>
+		
+		<!-- Vendor Action Ends -->
+	</package>
+
+</struts>

@@ -1,0 +1,27 @@
+<html>
+<body>
+<p>
+    Dear $fullName,
+</p>
+
+<p>
+    Welcome to Weddfix!.
+</p>
+
+<p>
+    Thanks for signing up to keep touch with Weddfix. From now on, you'll get regular updates on new vendors 
+    and special offers from Weddfix. 
+</p>
+
+<p>
+    Here's to the start your findings on Weddfix Services. 
+</p>
+
+<p>
+    Regards,
+    <br>
+    <br>
+    <a target="_blank" href="$url">Weddfix</a>
+</p>
+</body>
+</html>

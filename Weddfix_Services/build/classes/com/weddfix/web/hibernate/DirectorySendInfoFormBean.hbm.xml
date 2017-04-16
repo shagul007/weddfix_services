@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17 Sep, 2013 3:23:54 PM by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="com.weddfix.web.formbean.DirectorySendInfoFormBean" table="directorysendinfo">
+        <id name="id" type="java.lang.Long">
+            <column name="ID" />
+            <generator class="increment" />
+        </id>
+        <property name="vendorId" type="java.lang.Long">
+            <column name="vendorid" />
+        </property>
+        <property name="name" type="java.lang.String">
+            <column name="name" />
+        </property>
+        <property name="mobile" type="java.lang.Long">
+            <column name="mobile" />
+        </property>
+        <property name="email" type="java.lang.String">
+            <column name="email" />
+        </property>
+        <property name="weddingDate" type="java.util.Date">
+            <column name="weddingdate" />
+        </property>
+        <property name="sendEmail" type="java.lang.Boolean">
+            <column name="sendemail" />
+        </property>
+        <property name="needCallBack" type="java.lang.Boolean">
+            <column name="needcallback" />
+        </property>
+        <property name="statusId" type="java.lang.Long">
+            <column name="statusid" />
+        </property>
+        <property name="createdBy" type="java.lang.Long">
+            <column name="createdby" />
+        </property>
+        <property name="createdDate" type="java.util.Date">
+            <column name="createddate" />
+        </property>
+        <property name="updatedBy" type="java.lang.Long">
+            <column name="updatedby" />
+        </property>
+        <property name="updatedDate" type="java.util.Date">
+            <column name="updateddate" />
+        </property>
+         <property name="feedbackRequested" type="java.lang.Boolean">
+            <column name="feedbackrequested" />
+        </property>
+        <property name="feedbackStatus" type="java.lang.String">
+            <column name="feedbackstatus" />
+        </property>
+    </class>
+</hibernate-mapping>

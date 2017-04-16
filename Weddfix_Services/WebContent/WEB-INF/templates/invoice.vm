@@ -1,0 +1,54 @@
+<html>
+<body>
+<div style="width:680px;margin:0 auto;text-align:left;padding:0">
+<h1 style="font-size:30px;margin-bottom:0">Weddfix</h1>
+<h2 style="margin-top:0;color:#999;font-weight:normal">Order $no</h2>
+</div>
+<table style="clear:both">
+<tbody><tr>
+<th style="text-align:left">Order Num:</th>
+<td>$no</td>
+</tr>
+<tr>
+<th style="text-align:left">Order Date:</th>
+<td>$orderdate</td>
+</tr>
+<tr>
+<th style="text-align:left">Company:</th>
+<td>$company</td>
+</tr>
+<tr>
+<th style="text-align:left">Billed To:</th>
+<td>$billedto</td>
+</tr>
+<tr>
+<th style="text-align:left">Transaction ID:</th>
+<td>$transactionno (<strong>Paid</strong>)</td>
+</tr>
+</tbody></table>
+<br><br>
+<table style="clear:both;width:100%;overflow:hidden;border:none">
+<thead><tr>
+<th scope="col" style="font-weight:bold;text-align:left;width:50%; background-color: #cf6ac8; color: #fff;">Items Ordered</th>
+		<th scope="col" style="font-weight:bold;text-align:left; background-color: #cf6ac8; color: #fff;">Quantity</th>
+		<th scope="col" style="font-weight:bold;text-align:right; background-color: #cf6ac8; color: #fff;">Item Price</th>
+		<th scope="col" style="font-weight:bold;text-align:right; background-color: #cf6ac8; color: #fff;">Item Total</th>
+	</tr></thead>
+<tbody><tr>
+<td style="border:none">$itemname<br>
+</td>
+			<td style="border:none">1</td>
+			<td style="border:none;text-align:right">Rs.$price</td>
+			<td style="border:none;text-align:right">Rs.$price</td>
+		</tr>
+<tr>
+<th scope="row" colspan="3" style="font-weight:bold;text-align:right;padding:10px 0 0 0">Discount</th>
+		<td style="border:none;text-align:right;padding:10px 0 0 0">Rs.$discount</td>
+	</tr>
+<tr>
+<th scope="row" colspan="3" style="font-weight:bold;text-align:right;padding:10px 0 0 0">Total</th>
+		<td style="border:none;text-align:right;padding:10px 0 0 0">Rs.$total</td>
+	</tr>
+</tbody></table>
+</body>
+</html>

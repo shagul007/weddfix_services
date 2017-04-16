@@ -1,0 +1,777 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Aug 5, 2013 3:13:29 PM by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+	<sql-query name="getSequenceId">
+		<![CDATA[SELECT nextval(:seqName) as id]]>
+	</sql-query>
+
+	<sql-query name="getRoleMaster">
+		<![CDATA[SELECT id,rolename FROM directoryrole ORDER BY rolename ASC]]>
+	</sql-query>
+	
+	<sql-query name="getStatusMaster">
+		<![CDATA[SELECT id,statusname FROM status ORDER BY statusname ASC]]>
+	</sql-query>
+	
+	<sql-query name="getPlanMaster">
+		<![CDATA[SELECT id,planname FROM directoryupgradeplandetails ORDER BY planname ASC]]>
+	</sql-query>
+
+	<sql-query name="getOrgMaster">
+		<![CDATA[SELECT id,orgname FROM organization ORDER BY orgname ASC]]>
+	</sql-query>
+	
+	<sql-query name="getAllCity">
+		<![CDATA[SELECT id,cityname FROM city ORDER BY cityname ASC]]>
+	</sql-query>
+	
+	<sql-query name="getCityByCityName">
+		<![CDATA[SELECT id,cityname FROM city WHERE cityname=:cityName]]>
+	</sql-query>
+	
+	<sql-query name="getPaidVendorCity">
+		<![CDATA[SELECT DISTINCT c.id, c.cityname 
+				FROM directorycategoryinfo ci 
+				LEFT JOIN city c ON c.id = ci.cityid
+				LEFT JOIN directorycategoryinfoaccountdetails vac ON vac.categoryinfoid = ci.id
+				LEFT JOIN directoryupgradeplandetails up ON up.id = vac.accounttype
+				WHERE up.planname!='FREE' ORDER BY cityname ASC]]>
+	</sql-query>
+	
+	<sql-query name="getCurrencyMaster">
+		<![CDATA[SELECT id,currency FROM currency ORDER BY currency ASC]]>
+	</sql-query>
+
+	<sql-query name="getCountryMaster">
+		<![CDATA[SELECT id,countryname FROM country ORDER BY countryname ASC]]>
+	</sql-query>
+	
+	<sql-query name="getStatesMaster">
+		<![CDATA[SELECT id,stateName FROM state ORDER BY stateName ASC]]>
+	</sql-query>
+	
+	<sql-query name="getStateMaster">
+		<![CDATA[SELECT id,stateName FROM state WHERE countryid =:countryId ORDER BY stateName ASC]]>
+	</sql-query>
+	
+	<sql-query name="getCityMaster">
+		<![CDATA[SELECT id,cityname FROM city WHERE stateid =:stateId ORDER BY cityname ASC]]>
+	</sql-query>
+	
+	<!-- <sql-query name="getAllEmails">
+		<![CDATA[SELECT array_to_string( array( SELECT email FROM userprofile ), ',' ) as emails]]>
+	</sql-query> -->
+	
+	<sql-query name="getAllEmails">
+		<![CDATA[SELECT email FROM userprofile]]>
+	</sql-query>
+	
+	<sql-query name="getPromotionDetailsByPromoCode">
+		<![CDATA[SELECT to_char(expires, 'DD-Mon-YYYY') as validity, discount FROM promotiondetails WHERE promocode =:promoCode]]>
+	</sql-query>
+
+	<sql-query name="getUserProfileByEmail">
+		<![CDATA[SELECT u.id, u.fullname, u.email, u.password, u.passwordhash, u.mobile, r.rolename, s.statusname
+		, ad.deleteprofilereason, ad.isprofiledeleted, ad.verifymobilenumber, ad.verifyemailid, ad.verifiedmobilenumber, ad.verifiedemailid
+		, upd.planname, cd.planid, cd.categoryinfoid
+			FROM directoryuserprofile u 
+			LEFT JOIN directoryroledetails rd ON rd.userid = u.id
+			LEFT JOIN directoryaccountdetails ad ON ad.userid = u.id
+			LEFT JOIN directorycartdetails cd ON cd.userid = u.id
+			LEFT JOIN directoryupgradeplandetails upd ON upd.id = ad.accounttype
+			LEFT JOIN directoryrole r ON r.id = rd.roleid
+			JOIN status s ON s.id = u.statusid
+			WHERE email=:email]]>
+	</sql-query>
+	
+	<sql-query name="getCategoryInfoByCompanyName">
+		<![CDATA[SELECT c.id, c.companyname	FROM directorycategoryinfo c WHERE lower(c.companyname)=:companyName]]>
+	</sql-query>
+	
+	<sql-query name="getCategoryInfoByInfoId">
+		<![CDATA[SELECT c.id, c.companyname	FROM directorycategoryinfo c WHERE c.id=:id]]>
+	</sql-query>
+	
+	<sql-query name="getOrgInfoByOrgName">
+		<![CDATA[SELECT o.id, o.orgname	FROM organization o WHERE lower(o.orgname)=:orgName]]>
+	</sql-query>
+	
+	<sql-query name="getCategoryInfoByNotMyCompanyName">
+		<![CDATA[SELECT c.id, c.companyname	FROM directorycategoryinfo c WHERE lower(c.companyname)=:companyName AND lower(c.companyname) !=:oldCompanyName]]>
+	</sql-query>
+	
+	<sql-query name="getVendorProfileByEmail">
+		<![CDATA[SELECT u.id, u.fullname, u.email, u.password, u.passwordhash, u.mobile, r.rolename, s.statusname
+		, ad.deleteprofilereason, ad.isprofiledeleted, ad.verifymobilenumber, ad.verifyemailid, ad.verifiedmobilenumber, ad.verifiedemailid
+		, upd.planname, cd.planid
+			FROM directoryvendorprofile u 
+			LEFT JOIN directoryvendorroledetails rd ON rd.userid = u.id
+			LEFT JOIN directoryvendoraccountdetails ad ON ad.userid = u.id
+			LEFT JOIN directorycartdetails cd ON cd.userid = u.id
+			LEFT JOIN directoryupgradeplandetails upd ON upd.id = ad.accounttype
+			LEFT JOIN directoryrole r ON r.id = rd.roleid
+			JOIN status s ON s.id = u.statusid
+			WHERE email=:email]]>
+	</sql-query>
+	
+	<sql-query name="getUserProfileByUserId">
+		<![CDATA[SELECT u.id, u.fullname, u.email, u.password, u.passwordhash, r.rolename, s.statusname
+		FROM directoryuserprofile u 
+		JOIN directoryroledetails rd ON rd.userid = u.id
+		JOIN directoryrole r ON r.id = rd.roleid
+		JOIN status s ON s.id = u.statusid
+		WHERE u.id=:userId]]>
+	</sql-query>
+	
+	<sql-query name="getVendorProfileByUserId">
+		<![CDATA[SELECT u.id, u.fullname, u.email, u.password, u.passwordhash, r.rolename, s.statusname
+		FROM directoryvendorprofile u 
+		JOIN directoryvendorroledetails rd ON rd.userid = u.id
+		JOIN directoryrole r ON r.id = rd.roleid
+		JOIN status s ON s.id = u.statusid
+		WHERE u.id=:userId]]>
+	</sql-query>
+
+	<sql-query name="getSubscriberByEmail">
+		<![CDATA[SELECT * FROM subscribers WHERE subscriberemail=:email AND statusid=:statusId]]>
+	</sql-query>
+	
+	<sql-query name="getUpgradePlanDetails">
+		<![CDATA[SELECT planName, amount, validity, getsmsalert, id FROM directoryupgradeplandetails WHERE planname != 'FREE' ORDER BY id DESC]]>
+	</sql-query>
+	
+	<sql-query name="getBannerPhotoGallery">
+		<![CDATA[SELECT pg.id, pg.orgid, pg.filename, s.statusname
+			FROM photogallery pg
+			JOIN status s ON s.id = pg.statusid
+			WHERE pg.phototype='BANNERPHOTO' ORDER BY pg.createddate DESC]]>
+	</sql-query>
+	
+	<sql-query name="getActiveBannerPhotos">
+		<![CDATA[SELECT pg.id, pg.orgid, pg.filename, s.statusname
+			FROM photogallery pg
+			JOIN status s ON s.id = pg.statusid
+			WHERE pg.phototype='BANNERPHOTO' AND s.statusname='ACTIVE' ORDER BY pg.createddate DESC]]>
+	</sql-query>
+	
+	<sql-query name="getProfilePicturesByUserId">
+		<![CDATA[SELECT pg.* FROM photogallery pg
+				JOIN directoryuserprofile u ON u.id = pg.createdby
+				WHERE pg.createdby=:userId AND pg.phototype =:profileId]]>
+	</sql-query>
+	
+	<sql-query name="getUserProfileById">
+		<![CDATA[SELECT * FROM directoryuserprofile WHERE id=:id]]>
+	</sql-query>
+	
+	<sql-query name="getVendorProfileById">
+		<![CDATA[SELECT * FROM directoryvendorprofile WHERE id=:id]]>
+	</sql-query>
+
+	<sql-query name="getAllUserProfiles">
+		<![CDATA[SELECT u.id, u.fullname, u.email, u.mobile, u.roleid, u.statusid, r.rolename, s.statusname
+			FROM directoryuserprofile u
+			JOIN directoryrole r ON r.id = u.roleid
+			JOIN status s ON s.id = u.statusid]]>
+	</sql-query>
+	
+	<sql-query name="getAllVendorProfiles">
+		<![CDATA[SELECT u.id, u.fullname, u.email, u.mobile, u.roleid, u.statusid, r.rolename, s.statusname, a.accounttype, p.planname
+			FROM directoryvendorprofile u
+			JOIN directoryrole r ON r.id = u.roleid
+			JOIN directoryvendoraccountdetails a ON a.userid = u.id
+			JOIN directoryupgradeplandetails p ON p.id = a.accounttype
+			JOIN status s ON s.id = u.statusid]]>
+	</sql-query>
+	
+	<sql-query name="getAccountDetailsByUserId">
+		<![CDATA[SELECT ad.id, up.planname, up.amount, up.validity, to_char(ad.createddate, 'DD MM YYYY') as createddate, up.getsmsalert
+			FROM directoryvendoraccountdetails ad 
+			JOIN directoryupgradeplandetails up ON up.id = ad.accounttype
+			WHERE ad.userid=:userId]]>
+	</sql-query>
+	
+	<sql-query name="getPromotionDetails">
+		<![CDATA[SELECT pd.id, pd.promocode, to_char(pd.expires, 'DD/MM/YYYY') as expires, pd.discount, pd.email, to_char(pd.sent, 'DD/MM/YYYY') as sent, pd.sentto, s.statusname
+			FROM directorypromotiondetails pd
+			JOIN status s ON s.id = pd.statusid ORDER BY pd.createddate DESC]]>
+	</sql-query>
+	
+	<sql-query name="getCartDetails">
+		<![CDATA[SELECT cd.id, cd.planid, ud.planname, cd.plantype, ud.amount, ud.validity, s.statusname
+			FROM directorycartdetails cd
+			JOIN directoryupgradeplandetails ud ON ud.id = cd.planid
+			JOIN status s ON s.id = cd.statusid
+			WHERE cd.userid=:userId]]>
+	</sql-query>
+	
+	<sql-query name="getVendorAdminRoleIdByRoleName">
+		<![CDATA[SELECT id FROM directoryrole WHERE rolename=:roleName]]>
+	</sql-query>
+	
+	<sql-query name="validatePromoCode">
+		<![CDATA[SELECT pd.id, pd.promocode, to_char(pd.expires, 'YYYY-MM-DD') as expires, pd.discount, pd.email, pd.sent, s.statusname, pd.userid, pd.sentto
+			FROM directorypromotiondetails pd
+			JOIN status s ON s.id = pd.statusid
+			WHERE pd.promocode=:promoCode]]>
+	</sql-query>
+
+	<sql-query name="updateUserProfileDetailsById"> 
+		<![CDATA[update directoryuserprofile set fullname=:fullName, mobile=:mobile, cityid=:cityId, stateid=:stateId, countryid=:countryId, pincode=:pincode
+		, description=:description, weddingdate=:weddingDate, websiteurl=:websiteUrl, facebookurl=:facebookUrl, twitterurl=:twitterUrl, linkedinurl=:linkedinUrl
+		, pinteresturl=:pinterestUrl, instagramurl=:instagramUrl, updatedby=:updatedBy, updateddate=:updatedDate WHERE id=:id]]> 
+	</sql-query>
+	
+	<sql-query name="updateVendorProfileDetailsById"> 
+		<![CDATA[update directoryvendorprofile set fullname=:fullName, mobile=:mobile, cityid=:cityId, stateid=:stateId, countryid=:countryId, pincode=:pincode
+		, description=:description, websiteurl=:websiteUrl, facebookurl=:facebookUrl, twitterurl=:twitterUrl, linkedinurl=:linkedinUrl
+		, pinteresturl=:pinterestUrl, instagramurl=:instagramUrl, updatedby=:updatedBy, updateddate=:updatedDate WHERE id=:id]]> 
+	</sql-query>
+
+	<sql-query name="updateProfileId"> 
+		<![CDATA[update directoryuserprofile set profileid=:profileId WHERE id=:id]]> 
+	</sql-query>
+	
+	<sql-query name="updateBannerPhotoGalleryById"> 
+		<![CDATA[update photogallery set statusid=:statusId, updatedby=:updatedBy, updateddate=:updatedDate WHERE id=:id]]> 
+	</sql-query>
+	
+	<sql-query name="updatePersonalDetailsByUserId">
+         <![CDATA[update directoryuserprofile set profilepictureid=:profilePictureId
+         , updatedby=:updatedBy, updateddate=:updatedDate WHERE id=:userId]]>
+	</sql-query>
+	
+	<sql-query name="updateVendorPersonalDetailsByUserId">
+         <![CDATA[update directoryvendorprofile set profilepictureid=:profilePictureId
+         , updatedby=:updatedBy, updateddate=:updatedDate WHERE id=:userId]]>
+	</sql-query>
+	
+	<sql-query name="updateCategoryInfoByUserId">
+         <![CDATA[update directorycategoryinfo set categorypictureid=:categoryPictureId, phototype=:photoType
+         , updatedby=:updatedBy, updateddate=:updatedDate WHERE id=:id]]>
+	</sql-query>
+	
+	<sql-query name="updatePhotoGalleryPhotoTypeById">
+         <![CDATA[update photogallery set phototype=:photoType, orgid=:orgId
+         , updatedby=:updatedBy, updateddate=:updatedDate WHERE id=:id]]>
+	</sql-query>
+	
+	<sql-query name="updatePhotoGalleryById">
+         <![CDATA[update photogallery set orgid=:orgId,
+          updatedby=:updatedBy, updateddate=:updatedDate WHERE id=:id]]>
+	</sql-query>
+	
+	<sql-query name="updateProfilePictureById">
+         <![CDATA[update photogallery set filename=:fileName
+         ,filetype=:fileType, filesize=:fileSize, filepath=:filePath
+         ,updatedby=:updatedBy, updateddate=:updatedDate WHERE id=:id]]>
+	</sql-query>
+
+	<sql-query name="updateUserRoleAndStatusById">
+         <![CDATA[update directoryuserprofile set roleid=:roleId, statusid=:statusId,
+          updatedby=:updatedBy, updateddate=:updatedDate WHERE id=:id]]>
+	</sql-query>
+	
+	<sql-query name="updateVendorRoleAndStatusById">
+         <![CDATA[update directoryvendorprofile set roleid=:roleId, statusid=:statusId,
+          updatedby=:updatedBy, updateddate=:updatedDate WHERE id=:id]]>
+	</sql-query>
+	
+	<sql-query name="updateUserRoleByUserId">
+         <![CDATA[update directoryuserprofile set roleid=:roleId, updatedby=:updatedBy, updateddate=:updatedDate WHERE id=:id]]>
+	</sql-query>
+	
+	<sql-query name="updateRoleIdByUserId">
+         <![CDATA[update directoryroledetails set roleid=:roleId, updatedby=:updatedBy, updateddate=:updatedDate WHERE userid=:userId]]>
+	</sql-query>
+	
+	<sql-query name="updateIsProfileDeletedByUserId">
+         <![CDATA[update directoryaccountdetails set isprofiledeleted=:isProfileDeleted,
+          updatedby=:updatedBy, updateddate=:updatedDate WHERE userid=:userId]]>
+	</sql-query>
+	
+	<sql-query name="updateVendorProfileDeletedByUserId">
+         <![CDATA[update directoryvendoraccountdetails set isprofiledeleted=:isProfileDeleted, accounttype=:accountType, 
+          updatedby=:updatedBy, updateddate=:updatedDate WHERE userid=:userId]]>
+	</sql-query>
+	
+	<sql-query name="updateRoleDetailsByUserId">
+         <![CDATA[update directoryroledetails set roleid=:roleId, description=:description,
+          updatedby=:updatedBy, updateddate=:updatedDate WHERE userid=:userId]]>
+	</sql-query>
+	
+	<sql-query name="updateVendorRoleDetailsByUserId">
+         <![CDATA[update directoryvendorroledetails set roleid=:roleId, description=:description,
+          updatedby=:updatedBy, updateddate=:updatedDate WHERE userid=:userId]]>
+	</sql-query>
+	
+	<sql-query name="updateUserProfileInActiveByUserId">
+         <![CDATA[update directoryuserprofile set statusid=:statusId,
+          updatedby=:updatedBy, updateddate=:updatedDate WHERE id=:userId]]>
+	</sql-query>
+	
+	<sql-query name="getUserIdByResetKey">
+		<![CDATA[select * from directoryuserpwreset where resetkey=:resetKey]]>
+	</sql-query>
+	
+	<sql-query name="getVendorUserIdByResetKey">
+		<![CDATA[select * from directoryvendorpwreset where resetkey=:resetKey]]>
+	</sql-query>
+
+	<sql-query name="deletePwResetByUserId">
+		<![CDATA[delete from directoryuserpwreset where userid=:userId]]>
+	</sql-query>
+	
+	<sql-query name="deleteVendorPwResetByUserId">
+		<![CDATA[delete from directoryvendorpwreset where userid=:userId]]>
+	</sql-query>
+	
+	<sql-query name="deletePromotionById">
+		<![CDATA[delete from directorypromotiondetails where id=:id]]>
+	</sql-query>
+	
+	<sql-query name="deleteCartDetailsByUserId">
+		<![CDATA[delete from directorycartdetails where userid=:userId]]>
+	</sql-query>
+
+	<sql-query name="updateResetPasswordById">
+		<![CDATA[update directoryuserprofile set password=:password, passwordhash=:passwordHash, updatedby=:updatedBy, updateddate=:updatedDate WHERE id=:id]]>
+	</sql-query>
+	
+	<sql-query name="updateResetVendorPasswordById">
+		<![CDATA[update directoryvendorprofile set password=:password, passwordhash=:passwordHash, updatedby=:updatedBy, updateddate=:updatedDate WHERE id=:id]]>
+	</sql-query>
+	
+	<sql-query name="updateDeactivateProfileByUserId">
+		<![CDATA[update directoryaccountdetails set deactivateprofiledays=:deactivateProfileDays, deactivatedprofiledate=:deactivatedProfileDate, activateprofiledate=:activateProfileDate, isprofileactive=:isProfileActive, updatedby=:updatedBy, updateddate=:updatedDate WHERE userid=:userId]]>
+	</sql-query>
+	
+	<sql-query name="updateActivateProfileByUserId">
+		<![CDATA[update directoryaccountdetails set isprofileactive=:isProfileActive, updatedby=:updatedBy, updateddate=:updatedDate WHERE userid=:userId]]>
+	</sql-query>
+	
+	<sql-query name="updateDeleteProfileByUserId">
+		<![CDATA[update directoryaccountdetails set deleteprofilereason=:deleteProfileReason, isprofiledeleted=:isProfileDeleted, updatedby=:updatedBy, updateddate=:updatedDate WHERE userid=:userId]]>
+	</sql-query>
+	
+	<sql-query name="updatePromoDetailsByPromoCode">
+		<![CDATA[update directorypromotiondetails set email=:emailTo, sent=:sentDate, updatedby=:updatedBy, updateddate=:updatedDate WHERE promocode=:promoCode]]>
+	</sql-query>
+	
+	<sql-query name="updateAcceptedPromoDetailsByUserId">
+		<![CDATA[update directorypromotiondetails set userid=:userId, accepted=:acceptedDate, updatedby=:updatedBy, updateddate=:updatedDate WHERE promocode=:acceptedPromoCode]]>
+	</sql-query>
+	
+	<sql-query name="updateCartDetailsById">
+		<![CDATA[update directorycartdetails set planid=:planId, updatedby=:updatedBy, updateddate=:updatedDate WHERE id=:id]]>
+	</sql-query>
+	
+	<sql-query name="updateAccountDetailsByUserId">
+		<![CDATA[update directoryaccountdetails set accounttype=:accountType, transactionid=:txnId, transactionstatus=:txnStatus, createddate=:createdDate, updatedby=:updatedBy, updateddate=:updatedDate WHERE userid=:userId]]>
+	</sql-query>
+	
+	<sql-query name="updateCategoryInfoAccountDetailsByUserId">
+		<![CDATA[update directoryaccountdetails set accounttype=:accountType, transactionid=:txnId, transactionstatus=:txnStatus, createddate=:createdDate, updatedby=:updatedBy, updateddate=:updatedDate WHERE userid=:userId]]>
+	</sql-query>
+	
+	<sql-query name="updateEmailAndMobileCountByUserId">
+		<![CDATA[update directoryaccountdetails set emailcount=:emailCount, mobilecount=:mobileCount, updatedby=:updatedBy, updateddate=:updatedDate WHERE userid=:userId]]>
+	</sql-query>
+	
+	<sql-query name="updateMobileVerificationCodeByUserId">
+		<![CDATA[update directoryaccountdetails set verifymobilenumber=:verifyCode, updatedby=:updatedBy, updateddate=:updatedDate WHERE userid=:userId]]>
+	</sql-query>
+	
+	<sql-query name="updateVendorMobileVerificationCodeByUserId">
+		<![CDATA[update directoryvendoraccountdetails set verifymobilenumber=:verifyCode, updatedby=:updatedBy, updateddate=:updatedDate WHERE userid=:userId]]>
+	</sql-query>
+	
+	<sql-query name="verifyCodeAndUpdateMobileByUserId">
+		<![CDATA[update directoryuserprofile set mobile=:mobile, updatedby=:updatedBy, updateddate=:updatedDate WHERE id=:userId]]>
+	</sql-query>
+	
+	<sql-query name="verifyCodeAndUpdateVendorMobileByUserId">
+		<![CDATA[update directoryvendorprofile set mobile=:mobile, updatedby=:updatedBy, updateddate=:updatedDate WHERE id=:userId]]>
+	</sql-query>
+	
+	<sql-query name="updateVerifiedMobileNumberByUserId">
+		<![CDATA[update directoryaccountdetails set verifiedmobilenumber=:verifiedMobileNumber, updatedby=:updatedBy, updateddate=:updatedDate WHERE userid=:userId]]>
+	</sql-query>
+	
+	<sql-query name="updateVerifiedVendorMobileNumberByUserId">
+		<![CDATA[update directoryvendoraccountdetails set verifiedmobilenumber=:verifiedMobileNumber, updatedby=:updatedBy, updateddate=:updatedDate WHERE userid=:userId]]>
+	</sql-query>
+	
+	<sql-query name="updateMobileVerificationCodeDetailsByUserId">
+		<![CDATA[update directoryaccountdetails set verifymobilenumber=:verifyCode, verifiedmobilenumber=:verifiedMobileNumber, updatedby=:updatedBy, updateddate=:updatedDate WHERE userid=:userId]]>
+	</sql-query>
+	
+	<sql-query name="updateVendorMobileVerificationCodeDetailsByUserId">
+		<![CDATA[update directoryvendoraccountdetails set verifymobilenumber=:verifyCode, verifiedmobilenumber=:verifiedMobileNumber, updatedby=:updatedBy, updateddate=:updatedDate WHERE userid=:userId]]>
+	</sql-query>
+	
+	<!-- 	Starts the service query -->
+
+	<sql-query name="getCategoryInfoById">
+		<![CDATA[SELECT c.id, o.orgname, c.companyname, c.address, c.location, ct.cityname, st.statename, co.countryname, c.pincode, c.price, c.maxrating, c.maxusersrating, p.filename, cs.shortlisted, cs.id as shortlistedid 
+				FROM directorycategoryinfo c
+				JOIN organization o ON o.id = c.categoryid
+				JOIN city ct ON ct.id = c.cityid
+				JOIN state st ON st.id = c.stateid
+				JOIN country co ON co.id = c.countryid
+				LEFT JOIN photogallery p ON p.id = c.categorypictureid
+				LEFT JOIN directorycategoryshortlisted cs ON cs.userid=:userId AND cs.vendorid=c.id
+				LEFT JOIN directorycategoryinfoaccountdetails vac ON vac.categoryinfoid = c.id
+				LEFT JOIN directoryupgradeplandetails up ON up.id = vac.accounttype
+				JOIN status s ON s.id = c.statusid
+				WHERE c.categoryid=:categoryId AND s.statusname='ACTIVE' AND up.planname!='FREE' ORDER BY c.createddate DESC]]>
+	</sql-query>
+	
+	<sql-query name="getCategoryInfoByCity">
+		<![CDATA[SELECT c.id, o.orgname, c.companyname, c.address, c.location, ct.cityname, st.statename, co.countryname, c.pincode, c.price, c.maxrating, c.maxusersrating, p.filename, cs.shortlisted, cs.id as shortlistedid 
+				FROM directorycategoryinfo c
+				JOIN organization o ON o.id = c.categoryid
+				JOIN city ct ON ct.id = c.cityid
+				JOIN state st ON st.id = c.stateid
+				JOIN country co ON co.id = c.countryid
+				LEFT JOIN photogallery p ON p.id = c.categorypictureid
+				LEFT JOIN directorycategoryshortlisted cs ON cs.userid=:userId AND cs.vendorid=c.id
+				LEFT JOIN directorycategoryinfoaccountdetails vac ON vac.categoryinfoid = c.id
+				LEFT JOIN directoryupgradeplandetails up ON up.id = vac.accounttype
+				JOIN status s ON s.id = c.statusid
+				WHERE c.categoryid=:categoryId AND c.cityid=:cityId AND s.statusname='ACTIVE' AND up.planname!='FREE' ORDER BY c.createddate DESC]]>
+	</sql-query>
+	
+	<sql-query name="getCategoryInfoByLocation">
+		<![CDATA[SELECT c.id, o.orgname, c.companyname, c.address, c.location, ct.cityname, st.statename, co.countryname, c.pincode, c.price, c.maxrating, c.maxusersrating, p.filename, cs.shortlisted, cs.id as shortlistedid, c.categoryid  
+				FROM directorycategoryinfo c
+				JOIN organization o ON o.id = c.categoryid
+				JOIN city ct ON ct.id = c.cityid
+				JOIN state st ON st.id = c.stateid
+				JOIN country co ON co.id = c.countryid
+				LEFT JOIN photogallery p ON p.id = c.categorypictureid
+				LEFT JOIN directorycategoryshortlisted cs ON cs.userid=:userId AND cs.vendorid=c.id
+				LEFT JOIN directorycategoryinfoaccountdetails vac ON vac.categoryinfoid = c.id
+				LEFT JOIN directoryupgradeplandetails up ON up.id = vac.accounttype
+				JOIN status s ON s.id = c.statusid
+				WHERE c.pincode=:pincode AND s.statusname='ACTIVE' AND up.planname!='FREE' ORDER BY c.createddate DESC]]>
+	</sql-query>
+	
+	<sql-query name="getCategoryInfoByCityId">
+		<![CDATA[SELECT c.id, o.orgname, c.companyname, c.address, c.location, ct.cityname, st.statename, co.countryname, c.pincode, c.price, c.maxrating, c.maxusersrating, p.filename, cs.shortlisted, cs.id as shortlistedid, c.categoryid  
+				FROM directorycategoryinfo c
+				JOIN organization o ON o.id = c.categoryid
+				JOIN city ct ON ct.id = c.cityid
+				JOIN state st ON st.id = c.stateid
+				JOIN country co ON co.id = c.countryid
+				LEFT JOIN photogallery p ON p.id = c.categorypictureid
+				LEFT JOIN directorycategoryshortlisted cs ON cs.userid=:userId AND cs.vendorid=c.id
+				LEFT JOIN directorycategoryinfoaccountdetails vac ON vac.categoryinfoid = c.id
+				LEFT JOIN directoryupgradeplandetails up ON up.id = vac.accounttype
+				JOIN status s ON s.id = c.statusid
+				WHERE c.cityid=:cityId AND s.statusname='ACTIVE' AND up.planname!='FREE' ORDER BY c.createddate DESC]]>
+	</sql-query>
+	
+	<sql-query name="getCategoryInfoByUserId">
+		<![CDATA[SELECT c.id, o.orgname, c.companyname, c.address, c.location, ct.cityname, st.statename, co.countryname, c.pincode, c.price, c.maxrating, c.maxusersrating, p.filename, cs.shortlisted, cs.id as shortlistedid, c.categoryid  
+				FROM directorycategoryinfo c
+				JOIN organization o ON o.id = c.categoryid
+				JOIN city ct ON ct.id = c.cityid
+				JOIN state st ON st.id = c.stateid
+				JOIN country co ON co.id = c.countryid
+				LEFT JOIN photogallery p ON p.id = c.categorypictureid
+				LEFT JOIN directorycategoryshortlisted cs ON cs.userid=:userId AND cs.vendorid=c.id
+				LEFT JOIN directorycategoryinfoaccountdetails vac ON vac.categoryinfoid = c.id
+				LEFT JOIN directoryupgradeplandetails up ON up.id = vac.accounttype
+				JOIN status s ON s.id = c.statusid
+				WHERE s.statusname='ACTIVE' AND up.planname!='FREE' ORDER BY c.createddate DESC]]>
+	</sql-query>
+	
+	<sql-query name="getVendorDetailsById">
+		<![CDATA[SELECT c.id, o.orgname, c.companyname, c.address, c.location, ct.cityname, st.statename, co.countryname, c.pincode, c.price, c.maxrating, c.maxusersrating, c.description, c.latitude, p.fileName
+				, du.fullname, dct.cityname, dst.statename, dco.countryname, du.pincode, c.websiteurl, du.facebookurl, du.twitterurl, du.linkedinurl, du.pinteresturl, du.instagramurl, dp.filename
+				, c.contactname, c.mobile, c.phone, c.email, c.categoryvideourl 
+				FROM directorycategoryinfo c
+				JOIN directoryvendorprofile du ON du.id = c.createdby
+				JOIN organization o ON o.id = c.categoryid
+				JOIN city ct ON ct.id = c.cityid
+				JOIN city dct ON dct.id = du.cityid
+				JOIN state st ON st.id = c.stateid
+				JOIN state dst ON dst.id = du.stateid
+				JOIN country co ON co.id = c.countryid
+				JOIN country dco ON dco.id = du.countryid
+				LEFT JOIN photogallery p ON p.id = c.categorypictureid
+				LEFT JOIN photogallery dp ON dp.id = du.profilepictureid
+				JOIN status s ON s.id = c.statusid
+				WHERE c.id=:id AND s.statusname='ACTIVE']]>
+	</sql-query>
+	
+	<sql-query name="getVendorDetailsByCompanyName">
+		<![CDATA[SELECT c.id, o.orgname, c.companyname, c.address, c.location, ct.cityname, st.statename, co.countryname, c.pincode, c.price, c.maxrating, c.maxusersrating, c.description, c.latitude, p.fileName
+				, du.fullname, dct.cityname, dst.statename, dco.countryname, du.pincode, c.websiteurl, du.facebookurl, du.twitterurl, du.linkedinurl, du.pinteresturl, du.instagramurl, dp.filename
+				, c.contactname, c.mobile, c.phone, c.email, c.categoryvideourl 
+				FROM directorycategoryinfo c
+				JOIN directoryvendorprofile du ON du.id = c.createdby
+				JOIN organization o ON o.id = c.categoryid
+				JOIN city ct ON ct.id = c.cityid
+				JOIN city dct ON dct.id = du.cityid
+				JOIN state st ON st.id = c.stateid
+				JOIN state dst ON dst.id = du.stateid
+				JOIN country co ON co.id = c.countryid
+				JOIN country dco ON dco.id = du.countryid
+				LEFT JOIN photogallery p ON p.id = c.categorypictureid
+				LEFT JOIN photogallery dp ON dp.id = du.profilepictureid
+				JOIN status s ON s.id = c.statusid
+				WHERE lower(c.companyname)=:companyName AND s.statusname='ACTIVE']]>
+	</sql-query>
+	
+	<sql-query name="getAllClientInfoByOrgNameAndLimit">
+		<![CDATA[SELECT c.id, o.orgname, c.companyname, c.address, c.location, ct.cityname, st.statename, co.countryname, c.pincode, c.price, c.maxrating, c.maxusersrating, p.filename  
+				FROM directorycategoryinfo c
+				JOIN organization o ON o.id = c.categoryid
+				JOIN city ct ON ct.id = c.cityid
+				JOIN state st ON st.id = c.stateid
+				JOIN country co ON co.id = c.countryid
+				LEFT JOIN photogallery p ON p.id = c.categorypictureid
+				LEFT JOIN directorycategoryinfoaccountdetails vac ON vac.categoryinfoid = c.id
+				LEFT JOIN directoryupgradeplandetails up ON up.id = vac.accounttype
+				JOIN status s ON s.id = c.statusid
+				WHERE o.id=:orgId AND s.statusname='ACTIVE' AND up.planname!='FREE' ORDER BY c.createddate DESC LIMIT :limit]]>
+	</sql-query>
+
+	<sql-query name="getAllClientInfoByOrgName">
+		<![CDATA[SELECT c.id, o.orgname, c.companyname, c.address, c.location, ct.cityname, st.statename, co.countryname, c.pincode, c.price, c.maxrating, c.maxusersrating, p.filename  
+				FROM directorycategoryinfo c
+				JOIN organization o ON o.id = c.categoryid
+				JOIN city ct ON ct.id = c.cityid
+				JOIN state st ON st.id = c.stateid
+				JOIN country co ON co.id = c.countryid
+				LEFT JOIN photogallery p ON p.id = c.categorypictureid
+				LEFT JOIN directorycategoryinfoaccountdetails vac ON vac.categoryinfoid = c.id
+				LEFT JOIN directoryupgradeplandetails up ON up.id = vac.accounttype
+				JOIN status s ON s.id = c.statusid
+				WHERE o.id=:orgId AND s.statusname='ACTIVE' AND up.planname!='FREE' ORDER BY c.createddate DESC ]]>
+	</sql-query>
+	
+	<sql-query name="getMyDashBoardByUserId">
+		<![CDATA[SELECT u.id, u.fullname, u.description, to_char(u.weddingdate, 'Day, DD Mon YYYY') as weddingdate, p.filename, du.planname, to_char(da.createddate, 'DD MM YYYY') as createddate, du.validity 
+			, (SELECT COUNT(*) FROM directorycategoryinfo WHERE directorycategoryinfo.createdby = u.id) as infocount
+			, (SELECT COUNT(*) FROM directorycategoryshortlisted WHERE directorycategoryshortlisted.userid = u.id) as shortlistedcount
+			, DATE_PART('day', u.weddingdate - CURRENT_DATE) as weddingdaysleft
+			, (SELECT COUNT(*) FROM directorysendinfo WHERE directorysendinfo.createdby = u.id) as bookingcount
+			FROM directoryuserprofile u 
+			LEFT JOIN photogallery p ON p.id = u.profilepictureid
+			LEFT JOIN directoryaccountdetails da ON da.userid = u.id
+			LEFT JOIN directoryupgradeplandetails du ON du.id = da.accounttype
+			JOIN status s ON s.id = u.statusid
+			WHERE u.id=:userId and s.statusname = 'ACTIVE']]>
+	</sql-query>
+	
+	<sql-query name="getVendorDashBoardByUserId">
+		<![CDATA[SELECT u.id, u.fullname, u.description, p.filename, du.planname, to_char(da.createddate, 'DD MM YYYY') as createddate, du.validity 
+			, (SELECT COUNT(*) FROM directorycategoryinfo WHERE directorycategoryinfo.createdby = u.id) as infocount
+			, (SELECT COUNT(*) FROM directorycategoryinfo ci JOIN directorysendinfo si ON si.vendorid = ci.id WHERE ci.createdby =u.id) as bookingcount
+			FROM directoryvendorprofile u 
+			LEFT JOIN photogallery p ON p.id = u.profilepictureid
+			LEFT JOIN directoryvendoraccountdetails da ON da.userid = u.id
+			LEFT JOIN directoryupgradeplandetails du ON du.id = da.accounttype
+			JOIN status s ON s.id = u.statusid
+			WHERE u.id=:userId and s.statusname = 'ACTIVE']]>
+	</sql-query>
+	
+	<sql-query name="getMyWishlistDetailsoByUserId">
+		<![CDATA[SELECT c.id, o.orgname, c.companyname, c.address, c.location, ct.cityname, st.statename, co.countryname, c.pincode, c.price, c.maxrating, c.maxusersrating, p.filename
+				, (SELECT COUNT(*) FROM directorycategoryshortlisted WHERE directorycategoryshortlisted.userid = cs.userid) as shortlistedcount, cs.id as shortlistedid 
+				FROM directorycategoryshortlisted cs
+				JOIN directorycategoryinfo c ON c.id = cs.vendorid
+				JOIN organization o ON o.id = c.categoryid
+				JOIN city ct ON ct.id = c.cityid
+				JOIN state st ON st.id = c.stateid
+				JOIN country co ON co.id = c.countryid
+				LEFT JOIN photogallery p ON p.id = c.categorypictureid
+				JOIN status s ON s.id = c.statusid
+				WHERE cs.userid=:userId AND s.statusname='ACTIVE' ORDER BY c.createddate DESC	]]>
+	</sql-query>
+	
+	<sql-query name="getMyBookingDetailsoByUserId">
+		<![CDATA[SELECT c.id, o.orgname, c.companyname, c.address, c.location, ct.cityname, st.statename, co.countryname, c.pincode, c.price, c.maxrating, c.maxusersrating, p.filename
+				, (SELECT COUNT(*) FROM directorysendinfo WHERE directorysendinfo.createdby = si.createdby) as bookingcount, si.id as bookingid 
+				, c.contactname, c.email, c.mobile
+				FROM directorysendinfo si
+				JOIN directorycategoryinfo c ON c.id = si.vendorid
+				JOIN organization o ON o.id = c.categoryid
+				JOIN city ct ON ct.id = c.cityid
+				JOIN state st ON st.id = c.stateid
+				JOIN country co ON co.id = c.countryid
+				LEFT JOIN photogallery p ON p.id = c.categorypictureid
+				JOIN status s ON s.id = c.statusid
+				WHERE si.createdby=:userId AND s.statusname='ACTIVE' ORDER BY c.createddate DESC ]]>
+	</sql-query>
+	
+	<sql-query name="getVendorBookingDetailsoByUserId">
+		<![CDATA[SELECT up.id, si.name, si.email, si.mobile, ct.cityname, st.statename, co.countryname, up.pincode, c.id as cid, o.orgname, c.companyname, c.price, p.filename
+				, si.id as bookingid, s.statusname, to_char(si.createddate, 'DD/Mon/YYYY') as bookingdate, si.feedbackrequested, si.feedbackstatus
+				FROM directorysendinfo si
+				JOIN directorycategoryinfo c ON c.id = si.vendorid
+				JOIN directoryuserprofile up ON up.id = si.createdby
+				JOIN organization o ON o.id = c.categoryid
+				JOIN city ct ON ct.id = up.cityid
+				JOIN state st ON st.id = up.stateid
+				JOIN country co ON co.id = up.countryid
+				LEFT JOIN photogallery p ON p.id = c.categorypictureid
+				JOIN status s ON s.id = c.statusid
+				WHERE c.createdby=:userId AND s.statusname='ACTIVE' ORDER BY c.createddate DESC ]]>
+	</sql-query>
+	
+	<sql-query name="getPersonalDetailsByUserId">
+		<![CDATA[SELECT u.id, u.fullname, u.email, u.password, u.passwordhash, u.mobile, u.cityid, u.stateid, u.countryid, u.pincode, u.description, u.profilepictureid, to_char(u.weddingdate, 'DD/MM/YYYY') as weddingdate
+		, u.websiteurl , u.facebookurl, u.twitterurl, u.linkedinurl, u.pinteresturl, u.instagramurl, c.countryname, st.statename, ct.cityname, p.filename 
+			FROM directoryuserprofile u 
+			LEFT JOIN photogallery p ON p.id = u.profilepictureid
+			JOIN country c ON c.id = u.countryid
+			JOIN state st ON st.id = u.stateid
+			JOIN city ct ON ct.id = u.cityid
+			JOIN status s ON s.id = u.statusid
+			WHERE u.id=:userId and s.statusname = 'ACTIVE']]>
+	</sql-query>
+	
+	<sql-query name="getVendorPersonalDetailsByUserId">
+		<![CDATA[SELECT u.id, u.fullname, u.email, u.password, u.passwordhash, u.mobile, u.cityid, u.stateid, u.countryid, u.pincode, u.description, u.profilepictureid 
+		, u.websiteurl , u.facebookurl, u.twitterurl, u.linkedinurl, u.pinteresturl, u.instagramurl, c.countryname, st.statename, ct.cityname, p.filename 
+			FROM directoryvendorprofile u 
+			LEFT JOIN photogallery p ON p.id = u.profilepictureid
+			JOIN country c ON c.id = u.countryid
+			JOIN state st ON st.id = u.stateid
+			JOIN city ct ON ct.id = u.cityid
+			JOIN status s ON s.id = u.statusid
+			WHERE u.id=:userId and s.statusname = 'ACTIVE']]>
+	</sql-query>
+	
+	<sql-query name="getUserPersonalDetailsByUserId">
+		<![CDATA[SELECT u.id, u.fullname, u.email, u.mobile, to_char(u.weddingdate, 'DD/MM/YYYY') as weddingdate
+			FROM directoryuserprofile u 
+			JOIN status s ON s.id = u.statusid
+			WHERE u.id=:userId and s.statusname = 'ACTIVE']]>
+	</sql-query>
+	
+	<sql-query name="getVenueDetailsByUserId">
+		<![CDATA[SELECT c.id, c.companyname, c.address, c.location, ct.cityname, st.statename, co.countryname, c.pincode, c.price, pg.filename, c.phototype, c.categorypictureid, c.categoryvideourl
+				, c.categoryid, up.planname, up.amount, up.validity, to_char(ca.createddate, 'DD MM YYYY') as createddate
+				FROM directorycategoryinfo c
+				JOIN organization o ON o.id = c.categoryid
+				JOIN city ct ON ct.id = c.cityid
+				JOIN state st ON st.id = c.stateid
+				JOIN country co ON co.id = c.countryid
+				LEFT JOIN photogallery pg ON pg.id = c.categorypictureid
+				LEFT JOIN directorycategoryinfoaccountdetails ca ON ca.categoryinfoid = c.id
+				LEFT JOIN directoryupgradeplandetails up ON up.id = ca.accounttype
+				JOIN status s ON s.id = c.statusid
+				WHERE c.createdby=:userId AND s.statusname='ACTIVE' ORDER BY c.id DESC]]>
+	</sql-query>
+	
+	<sql-query name="getVenueDetailsById">
+		<![CDATA[SELECT c.id, c.companyname, c.contactname, c.mobile, c.phone, c.email, c.websiteurl, c.categoryid, c.subcategoryid, c.location, c.address, c.cityid, c.stateid, c.countryid
+				, c.pincode, c.description, c.seatcapacityid, c.price, c.latitude, c.longitude, c.categorypictureid, c.categoryvideourl, c.phototype, pg.filename
+				FROM directorycategoryinfo c
+				LEFT JOIN photogallery pg ON pg.id = c.categorypictureid
+				JOIN status s ON s.id = c.statusid
+				WHERE c.id=:id AND s.statusname='ACTIVE']]>
+	</sql-query>
+	
+	<sql-query name="getPhotoGalleryDetailsByUserId">
+		<![CDATA[SELECT pg.id, pg.filename, pg.orgid, pg.phototype
+				FROM photogallery pg
+				JOIN directorycategoryinfo dc ON dc.phototype = pg.phototype
+				JOIN status s ON s.id = pg.statusid
+				WHERE pg.createdby=:userId AND pg.orgid=:orgId AND pg.phototype=:photoType AND pg.id!=dc.categorypictureid AND s.statusname='ACTIVE' ORDER BY pg.createddate DESC]]>
+	</sql-query>
+	
+	<sql-query name="getReviewDetailsByVendorId">
+		<![CDATA[SELECT cr.id, cr.rating, cr.name, cr.email, cr.reviewtitle, cr.review, to_char(cr.createddate, 'DD Mon YYYY') as createddate, pg.filename
+				FROM directorycategoryreview cr
+				LEFT JOIN directoryuserprofile cu ON cu.id = cr.createdby
+				LEFT JOIN photogallery pg ON pg.id = cu.profilepictureid
+				JOIN status s ON s.id = cr.statusid
+				WHERE cr.vendorid=:vendorId AND s.statusname='ACTIVE' ORDER BY cr.createddate DESC]]>
+	</sql-query>
+	
+	<sql-query name="getPhotoGalleryDetailsById">
+		<![CDATA[SELECT pg.id, pg.filename, pg.orgid, pg.phototype
+				FROM photogallery pg
+				JOIN directorycategoryinfo dc ON dc.phototype = pg.phototype
+				JOIN status s ON s.id = pg.statusid
+				WHERE dc.id=:id AND pg.createdby=dc.createdby AND pg.orgid=dc.categoryid AND pg.phototype=dc.phototype AND pg.id!=dc.categorypictureid AND s.statusname='ACTIVE' ORDER BY pg.createddate DESC]]>
+	</sql-query>
+	
+	<sql-query name="getFeddbackInfoById">
+		<![CDATA[SELECT si.id, si.createdby, si.vendorid, si.feedbackstatus, maxrating, maxusersrating
+				FROM directorysendinfo si
+				JOIN directorycategoryinfo ci ON ci.id = si.vendorid
+				JOIN status s ON s.id = si.statusid
+				WHERE si.id=:id AND s.statusname='ACTIVE']]>
+	</sql-query>
+	
+	<sql-query name="getInvoiceDetailsById">
+		<![CDATA[SELECT ac.id, to_char(ac.createddate, 'DD-Mon-YYYY') as orderdate, vp.fullname, ac.transactionid, ci.companyname, pd.planname, pd.amount, pm.discount, vp.email
+				FROM directorycategoryinfoaccountdetails ac
+				JOIN directoryvendorprofile vp ON vp.id = ac.userid
+				JOIN directorycategoryinfo ci ON ci.id = ac.categoryinfoid
+				JOIN directoryupgradeplandetails pd ON pd.id = ac.accounttype
+				LEFT JOIN directorypromotiondetails pm ON pm.promocode =:promocode
+				JOIN status s ON s.id = ac.statusid
+				WHERE ac.id=:id AND s.statusname='ACTIVE']]>
+	</sql-query>
+	
+	<sql-query name="getImageDetailsById">
+		<![CDATA[SELECT id, phototype, orgid, filename, filepath, statusid
+				FROM photogallery 
+				WHERE id=:id]]>
+	</sql-query>
+	
+	<sql-query name="updateCategoryInfoId">
+		<![CDATA[UPDATE directorycategoryinfo set companyname=:companyName, contactname=:contactName, mobile=:mobile, phone=:phone, email=:email, websiteurl=:websiteUrl, categoryid=:categoryId
+				, location=:location, address=:address, cityid=:cityId, stateid=:stateId, countryid=:countryId, pincode=:pincode, description=:description, price=:price, latitude=:latitude
+				, categoryvideourl=:categoryVideoUrl, updatedby=:updatedBy, updateddate=:updatedDate WHERE id=:id]]>
+	</sql-query>
+	
+	<sql-query name="updateSendInfoId">
+		<![CDATA[UPDATE directorysendinfo set feedbackrequested=:feedbackRequested, updatedby=:updatedBy, updateddate=:updatedDate WHERE id=:id]]>
+	</sql-query>
+	
+	<sql-query name="updateCategoryInfoMaxRatingById">
+		<![CDATA[UPDATE directorycategoryinfo set maxrating=:maxRating, maxusersrating=:maxUsersRating, updatedby=:updatedBy, updateddate=:updatedDate WHERE id=:id]]>
+	</sql-query>
+	
+	<sql-query name="updateCategoryInfoMaxUsersRatingById">
+		<![CDATA[UPDATE directorycategoryinfo set maxusersrating=:maxUsersRating, updatedby=:updatedBy, updateddate=:updatedDate WHERE id=:id]]>
+	</sql-query>
+	
+	<sql-query name="updateSendInfoFeedbackStatusById">
+		<![CDATA[UPDATE directorysendinfo set feedbackstatus=:feedbackStatus, updatedby=:updatedBy, updateddate=:updatedDate WHERE id=:id]]>
+	</sql-query>
+	
+	<sql-query name="getAllOrganization">
+		<![CDATA[SELECT * from organization ORDER BY id ASC]]>
+	</sql-query>
+
+	<sql-query name="getClientInfoById">
+		<![CDATA[SELECT * FROM clientinfo WHERE id=:id]]>
+	</sql-query>
+	
+	<sql-query name="deleteCategoryInfoById">
+		<![CDATA[delete from directorycategoryinfo where id=:id]]>
+	</sql-query>
+	
+	<sql-query name="deleteCategoryShortlistedById">
+		<![CDATA[delete from directorycategoryshortlisted where id=:id]]>
+	</sql-query>
+	
+	<sql-query name="deletePhotoById">
+		<![CDATA[delete from photogallery where id=:id]]>
+	</sql-query>
+	
+	<!-- 	Ends the service query -->
+	
+</hibernate-mapping>

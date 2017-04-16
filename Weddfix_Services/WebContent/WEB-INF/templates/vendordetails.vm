@@ -1,0 +1,21 @@
+<html>
+<body>
+<p>
+    Dear $user, contact details of $vendorCompanyName:
+</p>
+
+<p>
+    Phone: $vendorMobile / $vendorPhone
+</p>
+<p>
+    Email: $vendorEmail
+</p>
+
+<p>
+    Regards,
+    <br>
+    <br>
+    <a target="_blank" href="$url">Weddfix</a>
+</p>
+</body>
+</html>

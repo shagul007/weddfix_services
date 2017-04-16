@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17 Sep, 2013 3:23:54 PM by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="com.weddfix.web.formbean.DirectoryCategoryShortlistedFormBean" table="directorycategoryshortlisted">
+        <id name="id" type="java.lang.Long">
+            <column name="ID" />
+            <generator class="increment" />
+        </id>
+        <property name="vendorId" type="java.lang.Long">
+            <column name="vendorid" />
+        </property>
+        <property name="userId" type="java.lang.Long">
+            <column name="userid" />
+        </property>
+        <property name="shortlisted" type="java.lang.Boolean">
+            <column name="shortlisted" />
+        </property>
+        <property name="statusId" type="java.lang.Long">
+            <column name="statusid" />
+        </property>
+        <property name="createdBy" type="java.lang.Long">
+            <column name="createdby" />
+        </property>
+        <property name="createdDate" type="java.util.Date">
+            <column name="createddate" />
+        </property>
+        <property name="updatedBy" type="java.lang.Long">
+            <column name="updatedby" />
+        </property>
+        <property name="updatedDate" type="java.util.Date">
+            <column name="updateddate" />
+        </property>
+    </class>
+</hibernate-mapping>

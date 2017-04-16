@@ -1,0 +1,33 @@
+<html>
+<body>
+<p>
+    Dear vendor, contact details of customer:
+</p>
+
+<p>
+    Name: $name
+</p>
+<p>
+    Mobile: $mobile
+</p>
+<p>
+    Email: $email
+</p>
+<p>
+    Wedding Date: $weddingDate
+</p>
+<p>
+    Send Email Back: $sendEmailBack
+</p>
+<p>
+    Send Call Back: $needCallBack
+</p>
+
+<p>
+    Regards,
+    <br>
+    <br>
+    <a target="_blank" href="$url">Weddfix</a>
+</p>
+</body>
+</html>

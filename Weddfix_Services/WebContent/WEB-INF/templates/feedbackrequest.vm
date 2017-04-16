@@ -1,0 +1,21 @@
+<html>
+<body>
+<p>
+    Dear $user, submit your feedback:
+</p>
+
+<p>
+    Click here to: <a target="_blank" href="$feedbackUrl">submit your feedback</a>
+</p>
+<p>
+    Feedback request by: $vendorCompanyName
+</p>
+
+<p>
+    Regards,
+    <br>
+    <br>
+    <a target="_blank" href="$url">Weddfix</a>
+</p>
+</body>
+</html>
