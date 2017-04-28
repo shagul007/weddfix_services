@@ -1688,8 +1688,24 @@ public class CommonMasterDaoImpl extends ActionSupport implements CommonMasterDa
 			
 			Transaction tx = conn.beginTransaction();
 			
-			DirectoryCategoryInfoAccountDetailsFormBean categoryInfoAccountDetailsFormBean = new DirectoryCategoryInfoAccountDetailsFormBean(); 
-
+			List<?> paymentDetails = conn.getNamedQuery("getPaymentDetailsByCategoryInfoId").setLong("categoryInfoId", categoryInfoId).list();
+			Iterator<?> itrPay = paymentDetails.iterator();
+			if (itrPay.hasNext()) {
+				Object[] obj = (Object[]) itrPay.next();
+		        conn.getNamedQuery("updatePaymentDetailsById")
+		        .setLong("userId", userId)
+		        .setLong("categoryInfoId", categoryInfoId)
+		        .setLong("planId", planId)
+		        .setString("txnId", txnId)
+		        .setString("txnStatus", CommonConstants.SUCCESS)
+		        .setLong("statusId", CommonConstants.ACTIVE)
+		        .setLong("updatedBy", userId)
+		        .setDate("updatedDate", new Date())
+		        .setLong("id", Long.parseLong(obj[0].toString())).executeUpdate();
+		        
+		        id = Long.parseLong(obj[0].toString());
+			} else {
+				DirectoryCategoryInfoAccountDetailsFormBean categoryInfoAccountDetailsFormBean = new DirectoryCategoryInfoAccountDetailsFormBean(); 
 				categoryInfoAccountDetailsFormBean.setUserId(userId);
 				categoryInfoAccountDetailsFormBean.setCategoryInfoId(categoryInfoId);
 				categoryInfoAccountDetailsFormBean.setAccountType(planId);
@@ -1699,7 +1715,8 @@ public class CommonMasterDaoImpl extends ActionSupport implements CommonMasterDa
 				categoryInfoAccountDetailsFormBean.setCreatedBy(userId);
 				categoryInfoAccountDetailsFormBean.setCreatedDate(new Date());
 				id = (Long) conn.save(categoryInfoAccountDetailsFormBean);
-
+			}
+			
 		        conn.getNamedQuery("deleteCartDetailsByUserId")
 		        .setLong("userId", userId).executeUpdate();
 		        if(acceptedPromoCode != null) {

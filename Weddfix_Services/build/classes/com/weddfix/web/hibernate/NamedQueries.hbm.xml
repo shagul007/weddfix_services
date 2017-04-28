@@ -332,10 +332,20 @@
 		<![CDATA[delete from directorypromotiondetails where id=:id]]>
 	</sql-query>
 	
+	<sql-query name="getPaymentDetailsByCategoryInfoId">
+		<![CDATA[select id, userid, categoryinfoid, accounttype from directorycategoryinfoaccountdetails where categoryinfoid=:categoryInfoId]]>
+	</sql-query>
+	
 	<sql-query name="deleteCartDetailsByUserId">
 		<![CDATA[delete from directorycartdetails where userid=:userId]]>
 	</sql-query>
 
+	<sql-query name="updatePaymentDetailsById">
+		<![CDATA[update directorycategoryinfoaccountdetails set userid=:userId, categoryinfoid=:categoryInfoId
+		, accounttype=:planId, transactionid=:txnId, transactionstatus=:txnStatus, statusid=:statusId
+		, updatedby=:updatedBy, updateddate=:updatedDate WHERE id=:id]]>
+	</sql-query>
+	
 	<sql-query name="updateResetPasswordById">
 		<![CDATA[update directoryuserprofile set password=:password, passwordhash=:passwordHash, updatedby=:updatedBy, updateddate=:updatedDate WHERE id=:id]]>
 	</sql-query>

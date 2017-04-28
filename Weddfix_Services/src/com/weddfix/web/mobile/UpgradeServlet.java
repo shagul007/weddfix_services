@@ -520,24 +520,42 @@ public class UpgradeServlet extends HttpServlet{
 		
 		if(save != null) {
         	if(save.equals("payment") && txnId != null && myPlanId > 0 && userId > 0 && categoryInfoId > 0) {
+        		Long id = 0L;
         		try {
         		conn = HibernateUtil.getSessionFactory().openSession();
     			
     			logger.info("-----------Update account details Method--------------");
     			
     			Transaction tx = conn.beginTransaction();
-
-    			DirectoryCategoryInfoAccountDetailsFormBean categoryInfoAccountDetailsFormBean = new DirectoryCategoryInfoAccountDetailsFormBean(); 
-
-				categoryInfoAccountDetailsFormBean.setUserId(userId);
-				categoryInfoAccountDetailsFormBean.setCategoryInfoId(categoryInfoId);
-				categoryInfoAccountDetailsFormBean.setAccountType(myPlanId);
-				categoryInfoAccountDetailsFormBean.setTransactionId(txnId);
-				categoryInfoAccountDetailsFormBean.setTransactionStatus(CommonConstants.SUCCESS);
-				categoryInfoAccountDetailsFormBean.setStatusId(CommonConstants.ACTIVE);
-				categoryInfoAccountDetailsFormBean.setCreatedBy(userId);
-				categoryInfoAccountDetailsFormBean.setCreatedDate(new Date());
-				Long id = (Long) conn.save(categoryInfoAccountDetailsFormBean);
+    			
+    			List<?> paymentDetails = conn.getNamedQuery("getPaymentDetailsByCategoryInfoId").setLong("categoryInfoId", categoryInfoId).list();
+    			Iterator<?> itrPay = paymentDetails.iterator();
+    			if (itrPay.hasNext()) {
+    				Object[] obj = (Object[]) itrPay.next();
+    		        conn.getNamedQuery("updatePaymentDetailsById")
+    		        .setLong("userId", userId)
+    		        .setLong("categoryInfoId", categoryInfoId)
+    		        .setLong("planId", myPlanId)
+    		        .setString("txnId", txnId)
+    		        .setString("txnStatus", CommonConstants.SUCCESS)
+    		        .setLong("statusId", CommonConstants.ACTIVE)
+    		        .setLong("updatedBy", userId)
+    		        .setDate("updatedDate", new Date())
+    		        .setLong("id", Long.parseLong(obj[0].toString())).executeUpdate();
+    		        
+    		        id = Long.parseLong(obj[0].toString());
+    			} else {
+    				DirectoryCategoryInfoAccountDetailsFormBean categoryInfoAccountDetailsFormBean = new DirectoryCategoryInfoAccountDetailsFormBean(); 
+    				categoryInfoAccountDetailsFormBean.setUserId(userId);
+    				categoryInfoAccountDetailsFormBean.setCategoryInfoId(categoryInfoId);
+    				categoryInfoAccountDetailsFormBean.setAccountType(myPlanId);
+    				categoryInfoAccountDetailsFormBean.setTransactionId(txnId);
+    				categoryInfoAccountDetailsFormBean.setTransactionStatus(CommonConstants.SUCCESS);
+    				categoryInfoAccountDetailsFormBean.setStatusId(CommonConstants.ACTIVE);
+    				categoryInfoAccountDetailsFormBean.setCreatedBy(userId);
+    				categoryInfoAccountDetailsFormBean.setCreatedDate(new Date());
+    				id = (Long) conn.save(categoryInfoAccountDetailsFormBean);
+    			}
 
 		        conn.getNamedQuery("deleteCartDetailsByUserId")
 		        .setLong("userId", userId).executeUpdate();
