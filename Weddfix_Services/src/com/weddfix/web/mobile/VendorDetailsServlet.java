@@ -19,6 +19,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.weddfix.web.formbean.DirectoryCategoryInfoFormBean;
 import com.weddfix.web.formbean.DirectoryCategoryReviewFormBean;
+import com.weddfix.web.formbean.DirectoryCategoryShortlistedFormBean;
 import com.weddfix.web.formbean.DirectoryUserProfileFormBean;
 import com.weddfix.web.formbean.PhotoGalleryFormBean;
 import com.weddfix.web.services.CategoryInfoService;
@@ -203,6 +204,24 @@ public class VendorDetailsServlet extends HttpServlet {
 					} else {
 						youtubeVideoUrls.add(urlMap);
 				    }
+					
+					if(userId > 0) {
+						List<DirectoryCategoryShortlistedFormBean> shortlistedInfoList = categoryInfoService
+								.loadShortlistedDetailsByUserId(userId, vendorId);
+						Iterator<?> itr1 = shortlistedInfoList.iterator();
+						
+					    if (itr1.hasNext()) {
+								obj = (Object[]) itr1.next();
+								map.put("shortlisted", obj[0]);
+								map.put("shortlistedId", obj[1]);
+					    } else {
+					    	map.put("shortlisted", "");
+					    	map.put("shortlistedId", "");
+					    }
+					} else {
+						map.put("shortlisted", "");
+				    	map.put("shortlistedId", "");
+					}
 
 				}
 				

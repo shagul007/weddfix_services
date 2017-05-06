@@ -232,10 +232,27 @@ public class CategoryInfoDaoImpl implements CategoryInfoDao, SessionAware {
 
 			logger.info("-----------Insert shortlisted details Method--------------");
 
+			List<?> alreadyExist = conn
+					.getNamedQuery("getShortlistedDetailsByUserId")
+					.setLong("userId", catagoryShortlistedFormBean.getUserId())
+					.setLong("vendorId", catagoryShortlistedFormBean.getVendorId()).list();
+			
+			Iterator<?> itr = alreadyExist.iterator();
+			
+		    if (itr.hasNext()) {
+		    		Object[] obj = (Object[]) itr.next();
+			conn.getNamedQuery("updateShortlistedById")
+					.setLong("id", Long.parseLong(obj[1].toString()))
+					.setLong("updatedBy",
+							catagoryShortlistedFormBean.getCreatedBy())
+					.setDate("updatedDate", new Date()).executeUpdate();
+			id = Long.parseLong(obj[1].toString());
+			} else {
 				catagoryShortlistedFormBean.setStatusId(CommonConstants.ACTIVE);
 				catagoryShortlistedFormBean.setCreatedDate(new Date());
 				id = (Long) conn.save(catagoryShortlistedFormBean);
-				tx.commit();
+			}
+			tx.commit();
 				
 		} catch (HibernateException hibernateException) {
 			tx.rollback();
@@ -762,6 +779,24 @@ public class CategoryInfoDaoImpl implements CategoryInfoDao, SessionAware {
 			conn.close();
 		}
 		return photoGalleryList;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<DirectoryCategoryShortlistedFormBean> loadShortlistedDetailsByUserId(Long userId, Long vendorId) {
+		List<DirectoryCategoryShortlistedFormBean> shortlistedList = null;
+		try {
+			conn = HibernateUtil.getSessionFactory().openSession();
+			shortlistedList = conn
+						.getNamedQuery("getShortlistedDetailsByUserId")
+						.setLong("userId", userId).setLong("vendorId", vendorId).list();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			conn.flush();
+			conn.close();
+		}
+		return shortlistedList;
 	}
 	
 	@SuppressWarnings("unchecked")

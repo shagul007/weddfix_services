@@ -147,6 +147,11 @@ public class CategoryInfoService {
 		return photoGalleryList;
 	}
 	
+	public List<DirectoryCategoryShortlistedFormBean> loadShortlistedDetailsByUserId(Long userId, Long vendorId) {
+		List<DirectoryCategoryShortlistedFormBean> shortlistedList = categoryInfoDao.loadShortlistedDetailsByUserId(userId, vendorId);
+		return shortlistedList;
+	}
+	
 	public List<DirectoryCategoryReviewFormBean> loadReviewDetailsByVendorId(Long vendorId) {
 		List<DirectoryCategoryReviewFormBean> reviewInfos = categoryInfoDao.loadReviewDetailsByVendorId(vendorId);
 		return reviewInfos;

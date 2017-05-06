@@ -98,4 +98,7 @@ public interface CategoryInfoDao {
 	public List<DirectoryCategoryInfoFormBean> searchCategoryByUserId(
 			Long userId);
 
+	public List<DirectoryCategoryShortlistedFormBean> loadShortlistedDetailsByUserId(
+			Long userId, Long vendorId);
+
 }
