@@ -1358,7 +1358,7 @@
       <div class="row">
       <c:if test="${hotels[0]['companyName'] != null}">
        <div class="col-md-12 vendor-listing">
-		<h3><s:property value="%{travels[0]['categoryName']}" />
+		<h3><s:property value="%{hotels[0]['categoryName']}" />
 		<a class="btn btn-default" href="vendor_list?search=<%=CommonConstants.HOTELS_STR%>" style="float: right; font-size: 10px; padding: 5px;">View All</a>
 		</h3>
 	</div>
