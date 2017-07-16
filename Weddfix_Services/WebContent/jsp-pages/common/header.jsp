@@ -346,7 +346,7 @@ function search_category_by_city() {
                 <li><a href="vendor_list?search=<%=CommonConstants.WEDDING_ASTROLOGERS_STR%>">Wedding Astrologers</a></li>
                 <li><a href="vendor_list?search=<%=CommonConstants.WEDDING_CLOTHES_STR%>">Wedding Clothes</a></li>
               	<li><a href="vendor_list?search=<%=CommonConstants.ENTERTAINMENTS_STR%>">Entertainments</a></li>
-                <li><a href="vendor_list?search=<%=CommonConstants.TEXTILES_STR%>">Textiles</a></li>
+                <li><a href="vendor_list?search=<%=CommonConstants.WEDDING_CARDS_STR%>">Wedding Cards</a></li>
                 <li><a href="vendor_list?search=<%=CommonConstants.TRAVELS_STR%>">Travels</a></li>
                 <li><a href="vendor_list?search=<%=CommonConstants.HOTELS_STR%>">Hotels</a></li>
               </ul>

@@ -61,7 +61,7 @@ public class CategoryInfoAction extends ActionSupport implements
 	private List<Map<String, Object>> caterings = new ArrayList<Map<String, Object>>();
 	private List<Map<String, Object>> entertainments = new ArrayList<Map<String, Object>>();
 	private List<Map<String, Object>> weddingClothes = new ArrayList<Map<String, Object>>();
-	private List<Map<String, Object>> textiles = new ArrayList<Map<String, Object>>();
+	private List<Map<String, Object>> weddingCards = new ArrayList<Map<String, Object>>();
 	private List<Map<String, Object>> travels = new ArrayList<Map<String, Object>>();
 	private List<Map<String, Object>> hotels = new ArrayList<Map<String, Object>>();
 	private List<Map<String, Object>> weddingAstrologers = new ArrayList<Map<String, Object>>();
@@ -939,7 +939,7 @@ public class CategoryInfoAction extends ActionSupport implements
 			loadCateringImages();
 			loadEntertainmentImages();
 			loadWeddingClothesImages();
-			loadTextilesImages();
+			loadWeddingCardsImages();
 			loadTravelsImages();
 			loadHotelsImages();
 			loadWeddingAstrologersImages();
@@ -978,7 +978,7 @@ public class CategoryInfoAction extends ActionSupport implements
 			loadCateringImages();
 			loadEntertainmentImages();
 			loadWeddingClothesImages();
-			loadTextilesImages();
+			loadWeddingCardsImages();
 			loadTravelsImages();
 			loadHotelsImages();
 			loadWeddingAstrologersImages();
@@ -1672,14 +1672,14 @@ public class CategoryInfoAction extends ActionSupport implements
 		}
 	}
 
-	public String loadTextilesImages() {
+	public String loadWeddingCardsImages() {
 		try {
 			String limit = null;
 			if (ActionContext.getContext().getName().equals("home")) {
 				limit = getText("home.image.limit");
 			}
 			List<DirectoryCategoryInfoFormBean> clientInfoList = categoryInfoService
-					.loadAllClientInfos(CommonConstants.TEXTILES, limit);
+					.loadAllClientInfos(CommonConstants.WEDDING_CARDS, limit);
 			Iterator<?> itr = clientInfoList.iterator();
 			while (itr.hasNext()) {
 
@@ -1704,7 +1704,7 @@ public class CategoryInfoAction extends ActionSupport implements
 				String companyName = obj[2].toString().replaceAll(" ", "_").toLowerCase();
 				map.put("vendorName", companyName.trim());
 
-				textiles.add(map);
+				weddingCards.add(map);
 			}
 			return "success";
 
@@ -1983,12 +1983,12 @@ public class CategoryInfoAction extends ActionSupport implements
 		this.entertainments = entertainments;
 	}
 
-	public List<Map<String, Object>> getTextiles() {
-		return textiles;
+	public List<Map<String, Object>> getWeddingCards() {
+		return weddingCards;
 	}
 
-	public void setTextiles(List<Map<String, Object>> textiles) {
-		this.textiles = textiles;
+	public void setWeddingCards(List<Map<String, Object>> weddingCards) {
+		this.weddingCards = weddingCards;
 	}
 
 	public Long getClientInfoId() {

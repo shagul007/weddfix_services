@@ -1224,22 +1224,22 @@
       <!-- /.venue box start-->
       </div>
       <div class="row">
-      <c:if test="${textiles[0]['companyName'] != null}">
+      <c:if test="${weddingCards[0]['companyName'] != null}">
       <div class="col-md-12 vendor-listing">
-		<h3><s:property value="%{textiles[0]['categoryName']}" />
-		<a class="btn btn-default" href="vendor_list?search=<%=CommonConstants.TEXTILES_STR%>" style="float: right; font-size: 10px; padding: 5px;">View All</a>
+		<h3><s:property value="%{weddingCards[0]['categoryName']}" />
+		<a class="btn btn-default" href="vendor_list?search=<%=CommonConstants.WEDDING_CARDS_STR%>" style="float: right; font-size: 10px; padding: 5px;">View All</a>
 		</h3>
 	</div>
 	<div id="jssor_9" style="position: relative; margin: 0 auto; top: 0px; left: 0px; width: 1178px; height: 350px; overflow: hidden; visibility: hidden;">
 	<div data-u="slides" style="cursor: default; position: relative; top: 0px; left: 0px; width: 1178px; height: 350px; overflow: hidden;">
-    <s:iterator value="textiles" status="incr">
+    <s:iterator value="weddingCards" status="incr">
       <div class="col-md-3 vendor-box"><!-- venue box start-->
         <div class="vendor-image"><!-- venue pic --> 
-        <a href="vendor_details?vendor_name=<s:property value="%{textiles[#incr.index]['vendorName']}" />">
-        <c:if test="${textiles[incr.index]['fileName'] != null}">
-        	<img height="146" width="264" class="img-responsive" src="<s:url action="ImageAction?imageId=%{textiles[#incr.index]['fileName']}" />" alt="<s:property value="%{textiles[#incr.index]['fileName']}" />" />
+        <a href="vendor_details?vendor_name=<s:property value="%{weddingCards[#incr.index]['vendorName']}" />">
+        <c:if test="${weddingCards[incr.index]['fileName'] != null}">
+        	<img height="146" width="264" class="img-responsive" src="<s:url action="ImageAction?imageId=%{weddingCards[#incr.index]['fileName']}" />" alt="<s:property value="%{weddingCards[#incr.index]['fileName']}" />" />
           </c:if>
-         <c:if test="${textiles[incr.index]['fileName'] == null}">
+         <c:if test="${weddingCards[incr.index]['fileName'] == null}">
 			<img height="146" width="264" class="img-responsive" src="images/vendor-1.jpg" alt="wedding venue">
          </c:if>
          </a>
@@ -1248,24 +1248,24 @@
         <!-- /.venue pic -->
         <div class="vendor-detail"><!-- venue details -->
           <div class="caption"><!-- caption -->
-            <h2><a href="vendor_details?vendor_name=<s:property value="%{textiles[#incr.index]['vendorName']}" />" class="title"><s:property value="%{textiles[#incr.index]['companyName']}" /></a></h2>
-            <p class="location"><i class="fa fa-map-marker"></i> <s:property value="%{textiles[#incr.index]['address']}" />, <s:property value="%{textiles[#incr.index]['location']}" />, 
-            <s:property value="%{textiles[#incr.index]['cityName']}" />, <s:property value="%{textiles[#incr.index]['pincode']}" />, <s:property value="%{textiles[#incr.index]['countryName']}" />.</p>
-            <c:if test="${textiles[incr.index]['maxRating'] != null}">
+            <h2><a href="vendor_details?vendor_name=<s:property value="%{weddingCards[#incr.index]['vendorName']}" />" class="title"><s:property value="%{weddingCards[#incr.index]['companyName']}" /></a></h2>
+            <p class="location"><i class="fa fa-map-marker"></i> <s:property value="%{weddingCards[#incr.index]['address']}" />, <s:property value="%{weddingCards[#incr.index]['location']}" />, 
+            <s:property value="%{weddingCards[#incr.index]['cityName']}" />, <s:property value="%{weddingCards[#incr.index]['pincode']}" />, <s:property value="%{weddingCards[#incr.index]['countryName']}" />.</p>
+            <c:if test="${weddingCards[incr.index]['maxRating'] != null}">
             <div class="rating" style="margin: -13px 0px -12px;"> 
-            <c:forEach var="i" begin="1" end="${textiles[incr.index]['maxRating']}">
+            <c:forEach var="i" begin="1" end="${weddingCards[incr.index]['maxRating']}">
             <i class="fa fa-star"></i> 
 			</c:forEach>
-			<c:forEach var="i" begin="1" end="${textiles[incr.index]['minRating']}">
+			<c:forEach var="i" begin="1" end="${weddingCards[incr.index]['minRating']}">
             <i class="fa fa-star-o"></i> 
 			</c:forEach>
-            <span class="rating-count">(<s:property value="%{textiles[#incr.index]['maxUsersRating']}" />)</span> 
+            <span class="rating-count">(<s:property value="%{weddingCards[#incr.index]['maxUsersRating']}" />)</span> 
             </div>
             </c:if>
           </div>
           <!-- /.caption -->
           <div class="vendor-price">
-            <div class="price">Rs. <s:property value="%{textiles[#incr.index]['price']}" /></div>
+            <div class="price">Rs. <s:property value="%{weddingCards[#incr.index]['price']}" /></div>
           </div>
         </div>
         <!-- venue details --> 

@@ -132,7 +132,7 @@ public class VendorListByLocationServlet extends HttpServlet {
 						entertainmentList.add(map);
 					} else if(Long.parseLong(obj[15].toString()) == CommonConstants.WEDDING_CLOTHES) {
 						weddingClotheList.add(map);
-					} else if(Long.parseLong(obj[15].toString()) == CommonConstants.TEXTILES) {
+					} else if(Long.parseLong(obj[15].toString()) == CommonConstants.WEDDING_CARDS) {
 						textileList.add(map);
 					} else if(Long.parseLong(obj[15].toString()) == CommonConstants.TRAVELS) {
 						travelList.add(map);
@@ -152,7 +152,7 @@ public class VendorListByLocationServlet extends HttpServlet {
 					rootMap.put("caterings", cateringList);
 					rootMap.put("entertainments", entertainmentList);
 					rootMap.put("weddingClothes", weddingClotheList);
-					rootMap.put("textiles", textileList);
+					rootMap.put("weddingCards", textileList);
 					rootMap.put("travels", travelList);
 					rootMap.put("hotels", hotelList);
 					rootMap.put("weddingAstrologers", weddingAstrologerList);
@@ -252,7 +252,7 @@ public class VendorListByLocationServlet extends HttpServlet {
 						entertainmentList.add(map);
 					} else if(Long.parseLong(obj[15].toString()) == CommonConstants.WEDDING_CLOTHES) {
 						weddingClotheList.add(map);
-					} else if(Long.parseLong(obj[15].toString()) == CommonConstants.TEXTILES) {
+					} else if(Long.parseLong(obj[15].toString()) == CommonConstants.WEDDING_CARDS) {
 						textileList.add(map);
 					} else if(Long.parseLong(obj[15].toString()) == CommonConstants.TRAVELS) {
 						travelList.add(map);
@@ -272,7 +272,7 @@ public class VendorListByLocationServlet extends HttpServlet {
 					rootMap.put("caterings", cateringList);
 					rootMap.put("entertainments", entertainmentList);
 					rootMap.put("weddingClothes", weddingClotheList);
-					rootMap.put("textiles", textileList);
+					rootMap.put("weddingCards", textileList);
 					rootMap.put("travels", travelList);
 					rootMap.put("hotels", hotelList);
 					rootMap.put("weddingAstrologers", weddingAstrologerList);
@@ -372,7 +372,7 @@ public class VendorListByLocationServlet extends HttpServlet {
 						entertainmentList.add(map);
 					} else if(Long.parseLong(obj[15].toString()) == CommonConstants.WEDDING_CLOTHES) {
 						weddingClotheList.add(map);
-					} else if(Long.parseLong(obj[15].toString()) == CommonConstants.TEXTILES) {
+					} else if(Long.parseLong(obj[15].toString()) == CommonConstants.WEDDING_CARDS) {
 						textileList.add(map);
 					} else if(Long.parseLong(obj[15].toString()) == CommonConstants.TRAVELS) {
 						travelList.add(map);
@@ -392,7 +392,7 @@ public class VendorListByLocationServlet extends HttpServlet {
 					rootMap.put("caterings", cateringList);
 					rootMap.put("entertainments", entertainmentList);
 					rootMap.put("weddingClothes", weddingClotheList);
-					rootMap.put("textiles", textileList);
+					rootMap.put("weddingCards", textileList);
 					rootMap.put("travels", travelList);
 					rootMap.put("hotels", hotelList);
 					rootMap.put("weddingAstrologers", weddingAstrologerList);

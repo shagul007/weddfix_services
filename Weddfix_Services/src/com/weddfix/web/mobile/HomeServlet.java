@@ -486,7 +486,7 @@ public class HomeServlet extends HttpServlet {
 			main.put("weddingClothes", categoryList);
             
 			categoryInfoList = categoryInfoService
-					.loadAllClientInfos(CommonConstants.TEXTILES, rb.getString("home.image.limit"));
+					.loadAllClientInfos(CommonConstants.WEDDING_CARDS, rb.getString("home.image.limit"));
         	
         	categoryList = new LinkedList<LinkedHashMap<String, Object>>();
         	
@@ -531,7 +531,7 @@ public class HomeServlet extends HttpServlet {
 				categoryList.add(map);
 			}
 			
-			main.put("textiles", categoryList);
+			main.put("weddingCards", categoryList);
 			
 			categoryInfoList = categoryInfoService
 					.loadAllClientInfos(CommonConstants.TRAVELS, rb.getString("home.image.limit"));

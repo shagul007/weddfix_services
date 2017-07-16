@@ -32,7 +32,7 @@ public class CommonConstants {
 	public static final Long CATERINGS = 6l;
 	public static final Long ENTERTAINMENTS = 7l;
 	public static final Long WEDDING_CLOTHES = 8l;
-	public static final Long TEXTILES = 9l;
+	public static final Long WEDDING_CARDS = 9l;
 	public static final Long TRAVELS = 10l;
 	public static final Long HOTELS = 11l;
 	public static final Long WEDDING_ASTROLOGERS = 12l;
@@ -44,7 +44,7 @@ public class CommonConstants {
 	public static final String CATERINGS_STR = "caterings";
 	public static final String ENTERTAINMENTS_STR = "entertainments";
 	public static final String WEDDING_CLOTHES_STR = "wedding_clothes";
-	public static final String TEXTILES_STR = "textiles";
+	public static final String WEDDING_CARDS_STR = "wedding_cards";
 	public static final String TRAVELS_STR = "travels";
 	public static final String HOTELS_STR = "hotels";
 	public static final String WEDDING_ASTROLOGERS_STR = "wedding_astrologers";
